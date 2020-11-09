@@ -1,148 +1,200 @@
 <template>
-	<view>
-		<view class='order-submission'>
-			<view class="allAddress" :style="store_self_mention ? '':'padding-top:10rpx'">
-				<view class="nav acea-row">
-					<view class="item font-color" :class="shippingType == 0 ? 'on' : 'on2'" @tap="addressType(0)" v-if='store_self_mention'></view>
-					<view class="item font-color" :class="shippingType == 1 ? 'on' : 'on2'" @tap="addressType(1)" v-if='store_self_mention'></view>
-				</view>
-				<view class='address acea-row row-between-wrapper' @tap='onAddress' v-if='shippingType == 0'>
-					<view class='addressCon' v-if="addressInfo.realName">
-						<view class='name'>{{addressInfo.realName}}
-							<text class='phone'>{{addressInfo.phone}}</text>
-						</view>
-						<view><text class='default font-color' v-if="addressInfo.isDefault">[默认]</text>{{addressInfo.province}}{{addressInfo.city}}{{addressInfo.district}}{{addressInfo.detail}}</view>
-					</view>
-					<view class='addressCon' v-else>
-						<view class='setaddress'>设置收货地址</view>
-					</view>
-					<view class='iconfont icon-jiantou'></view>
-				</view>
-				<view class='address acea-row row-between-wrapper' v-else @tap="showStoreList">
-					<block v-if="storeList.length>0">
-						<view class='addressCon'>
-							<view class='name'>{{system_store.name}}
-								<text class='phone'>{{system_store.phone}}</text>
-							</view>
-							<view> {{system_store.address}}{{", " + system_store.detailedAddress}}</view>
-						</view>
-						<view class='iconfont icon-jiantou'></view>
-					</block>
-					<block v-else>
-						<view>暂无门店信息</view>
-					</block>
-				</view>
-				<view class='line'>
-					<image src='/static/images/line.jpg'></image>
-				</view>
-			</view>
-			<orderGoods :cartInfo="cartInfo"></orderGoods>
-			<view class='wrapper'>
-				<view class='item acea-row row-between-wrapper' @tap='couponTap' v-if="!pinkId && !BargainId && !combinationId && !seckillId">
-					<view>优惠券</view>
-					<view class='discount'>{{couponTitle}}
-						<text class='iconfont icon-jiantou'></text>
-					</view>
-				</view>
-				<view class='item acea-row row-between-wrapper' v-if="!pinkId && !BargainId && !combinationId && !seckillId">
-					<view>积分抵扣</view>
-					<view class='discount acea-row row-middle'>
-						<view> {{useIntegral ? "剩余积分":"当前积分"}}
-							<text class='num font-color'>{{integral || 0}}</text>
-						</view>
-						<checkbox-group @change="ChangeIntegral">
-							<checkbox :checked='useIntegral ? true : false' />
-						</checkbox-group>
-					</view>
-				</view>
-				<view class='item acea-row row-between-wrapper' v-if="priceGroup.vipPrice > 0 && userInfo.vip && !pinkId && !BargainId && !combinationId && !seckillId">
-					<view>会员优惠</view>
-					<view class='discount'>-￥{{priceGroup.vipPrice}}</view>
-				</view>
-				<view class='item acea-row row-between-wrapper' v-if='shippingType==0'>
-					<view>快递费用</view>
-					<view class='discount' v-if='parseFloat(priceGroup.storePostage) > 0'>+￥{{priceGroup.storePostage}}</view>
-					<view class='discount' v-else>免运费</view>
-				</view>
-				<view v-else>
-					<view class="item acea-row row-between-wrapper">
-						<view>联系人</view>
-						<view class="discount">
-							<input type="text" placeholder="请填写您的联系姓名" placeholder-class="placeholder" @blur='realName'></input>
-						</view>
-					</view>
-					<view class="item acea-row row-between-wrapper">
-						<view>联系电话</view>
-						<view class="discount">
-							<input type="text" placeholder="请填写您的联系电话" placeholder-class="placeholder" @blur='phone'></input>
-						</view>
-					</view>
-				</view>
-				<!-- <view class='item acea-row row-between-wrapper' wx:else>
+    <view>
+        <view class='order-submission'>
+            <view class="allAddress"
+                  :style="store_self_mention ? '':'padding-top:10rpx'">
+                <view class="nav acea-row">
+                    <view class="item font-color"
+                          :class="shippingType == 0 ? 'on' : 'on2'"
+                          @tap="addressType(0)"
+                          v-if='store_self_mention'></view>
+                    <view class="item font-color"
+                          :class="shippingType == 1 ? 'on' : 'on2'"
+                          @tap="addressType(1)"
+                          v-if='store_self_mention'></view>
+                </view>
+                <view class='address acea-row row-between-wrapper'
+                      @tap='onAddress'
+                      v-if='shippingType == 0'>
+                    <view class='addressCon'
+                          v-if="addressInfo.realName">
+                        <view class='name'>{{addressInfo.realName}}
+                            <text class='phone'>{{addressInfo.phone}}</text>
+                        </view>
+                        <view><text class='default font-color'
+                                  v-if="addressInfo.isDefault">[默认]</text>{{addressInfo.province}}{{addressInfo.city}}{{addressInfo.district}}{{addressInfo.detail}}</view>
+                    </view>
+                    <view class='addressCon'
+                          v-else>
+                        <view class='setaddress'>设置收货地址</view>
+                    </view>
+                    <view class='iconfont icon-jiantou'></view>
+                </view>
+                <view class='address acea-row row-between-wrapper'
+                      v-else
+                      @tap="showStoreList">
+                    <block v-if="storeList.length>0">
+                        <view class='addressCon'>
+                            <view class='name'>{{system_store.name}}
+                                <text class='phone'>{{system_store.phone}}</text>
+                            </view>
+                            <view> {{system_store.address}}{{", " + system_store.detailedAddress}}</view>
+                        </view>
+                        <view class='iconfont icon-jiantou'></view>
+                    </block>
+                    <block v-else>
+                        <view>暂无门店信息</view>
+                    </block>
+                </view>
+                <view class='line'>
+                    <image src='/static/images/line.jpg'></image>
+                </view>
+            </view>
+            <orderGoods :cartInfo="cartInfo"></orderGoods>
+            <view class='wrapper'>
+                <view class='item acea-row row-between-wrapper'
+                      @tap='couponTap'
+                      v-if="!pinkId && !BargainId && !combinationId && !seckillId">
+                    <view>优惠券</view>
+                    <view class='discount'>{{couponTitle}}
+                        <text class='iconfont icon-jiantou'></text>
+                    </view>
+                </view>
+                <view class='item acea-row row-between-wrapper'
+                      v-if="!pinkId && !BargainId && !combinationId && !seckillId">
+                    <view>积分抵扣</view>
+                    <view class='discount acea-row row-middle'>
+                        <view> {{useIntegral ? "剩余积分":"当前积分"}}
+                            <text class='num font-color'>{{integral || 0}}</text>
+                        </view>
+                        <checkbox-group @change="ChangeIntegral">
+                            <checkbox :checked='useIntegral ? true : false' />
+                        </checkbox-group>
+                    </view>
+                </view>
+                <view class='item acea-row row-between-wrapper'
+                      v-if="priceGroup.vipPrice > 0 && userInfo.vip && !pinkId && !BargainId && !combinationId && !seckillId">
+                    <view>会员优惠</view>
+                    <view class='discount'>-￥{{priceGroup.vipPrice}}</view>
+                </view>
+                <view class='item acea-row row-between-wrapper'
+                      v-if='shippingType==0'>
+                    <view>快递费用</view>
+                    <view class='discount'
+                          v-if='parseFloat(priceGroup.storePostage) > 0'>+￥{{priceGroup.storePostage}}</view>
+                    <view class='discount'
+                          v-else>免运费</view>
+                </view>
+                <view v-else>
+                    <view class="item acea-row row-between-wrapper">
+                        <view>联系人</view>
+                        <view class="discount">
+                            <input type="text"
+                                   placeholder="请填写您的联系姓名"
+                                   placeholder-class="placeholder"
+                                   @blur='realName'></input>
+                        </view>
+                    </view>
+                    <view class="item acea-row row-between-wrapper">
+                        <view>联系电话</view>
+                        <view class="discount">
+                            <input type="text"
+                                   placeholder="请填写您的联系电话"
+                                   placeholder-class="placeholder"
+                                   @blur='phone'></input>
+                        </view>
+                    </view>
+                </view>
+                <!-- <view class='item acea-row row-between-wrapper' wx:else>
 		      <view>自提门店</view>
 		      <view class='discount'>{{system_store.name}}</view>
 		    </view> -->
-				<view class='item' v-if="textareaStatus">
-					<view>备注信息</view>
-					<textarea v-if="coupon.coupon===false" placeholder-class='placeholder' @input='bindHideKeyboard' value="" name="mark"
-					 placeholder='请添加备注（150字以内）'></textarea>
-				</view>
-			</view>
-			<view class='wrapper'>
-				<view class='item'>
-					<view>支付方式</view>
-					<view class='list'>
-						<view class='payItem acea-row row-middle' :class='active==index ?"on":""' @tap='payItem(index)' v-for="(item,index) in cartArr"
-						 :key='index' v-if="item.payStatus==1">
-							<view class='name acea-row row-center-wrapper'>
-								<view class='iconfont animated' :class='(item.icon) + " " + (animated==true&&active==index ?"bounceIn":"")'></view>{{item.name}}
-							</view>
-							<view class='tip'>{{item.title}}</view>
-						</view>
-						<!-- #ifdef MP || APP-PLUS -->
-						<!-- <view class='payItem acea-row row-middle' :class='active==index ?"on":""' @tap='payItem(index)' v-for="(item,index) in cartArr"
+                <view class='item'
+                      v-if="textareaStatus">
+                    <view>备注信息</view>
+                    <textarea v-if="coupon.coupon===false"
+                              placeholder-class='placeholder'
+                              @input='bindHideKeyboard'
+                              value=""
+                              name="mark"
+                              placeholder='请添加备注（150字以内）'></textarea>
+                </view>
+            </view>
+            <view class='wrapper'>
+                <view class='item'>
+                    <view>支付方式</view>
+                    <view class='list'>
+                        <view class='payItem acea-row row-middle'
+                              :class='active==index ?"on":""'
+                              @tap='payItem(index)'
+                              v-for="(item,index) in cartArr"
+                              :key='index'
+                              v-if="item.payStatus==1">
+                            <view class='name acea-row row-center-wrapper'>
+                                <view class='iconfont animated'
+                                      :class='(item.icon) + " " + (animated==true&&active==index ?"bounceIn":"")'></view>{{item.name}}
+                            </view>
+                            <view class='tip'>{{item.title}}</view>
+                        </view>
+                        <!-- #ifdef MP || APP-PLUS -->
+                        <!-- <view class='payItem acea-row row-middle' :class='active==index ?"on":""' @tap='payItem(index)' v-for="(item,index) in cartArr"
 						 :key='index' v-if="item.payStatus==1">
 							<view class='name acea-row row-center-wrapper'>
 								<view class='iconfont animated' :class='(item.icon) + " " + (animated==true&&active==index ?"bounceIn":"")'></view>{{item.name}}
 							</view>
 							<view class='tip'>{{item.title}}</view>
 						</view> -->
-						<!-- #endif -->
-					</view>
-				</view>
-			</view>
-			<view class='moneyList'>
-				<view class='item acea-row row-between-wrapper'>
-					<view>商品总价：</view>
-					<view class='money'>￥{{priceGroup.totalPrice}}</view>
-				</view>
-				<view class='item acea-row row-between-wrapper' v-if="coupon_price > 0">
-					<view>优惠券抵扣：</view>
-					<view class='money'>-￥{{coupon_price}}</view>
-				</view>
-				<view class='item acea-row row-between-wrapper' v-if="integral_price > 0">
-					<view>积分抵扣：</view>
-					<view class='money'>-￥{{integral_price}}</view>
-				</view>
-				<view class='item acea-row row-between-wrapper' v-if="priceGroup.storePostage > 0">
-					<view>运费：</view>
-					<view class='money'>+￥{{priceGroup.storePostage}}</view>
-				</view>
-			</view>
-			<view style='height:120rpx;'></view>
-			<view class='footer acea-row row-between-wrapper'>
-				<view>合计:
-					<text class='font-color'>￥{{totalPrice || 0}}</text>
-				</view>
-				<view class='settlement' style='z-index:100' @tap="SubOrder">立即结算</view>
-			</view>
-		</view>
-		<couponListWindow :coupon='coupon' @ChangCouponsClone="ChangCouponsClone" :openType='openType' :cartId='cartId'
-		 @ChangCoupons="ChangCoupons"></couponListWindow>
-		<addressWindow ref="addressWindow" @changeTextareaStatus="changeTextareaStatus" :address='address' :pagesUrl="pagesUrl"
-		 @OnChangeAddress="OnChangeAddress" @changeClose="changeClose"></addressWindow>
-		<authorize @onLoadFun="onLoadFun" :isAuto="isAuto" :isShowAuth="isShowAuth" @authColse="authColse"></authorize>
-	</view>
+                        <!-- #endif -->
+                    </view>
+                </view>
+            </view>
+            <view class='moneyList'>
+                <view class='item acea-row row-between-wrapper'>
+                    <view>商品总价：</view>
+                    <view class='money'>￥{{priceGroup.totalPrice}}</view>
+                </view>
+                <view class='item acea-row row-between-wrapper'
+                      v-if="coupon_price > 0">
+                    <view>优惠券抵扣：</view>
+                    <view class='money'>-￥{{coupon_price}}</view>
+                </view>
+                <view class='item acea-row row-between-wrapper'
+                      v-if="integral_price > 0">
+                    <view>积分抵扣：</view>
+                    <view class='money'>-￥{{integral_price}}</view>
+                </view>
+                <view class='item acea-row row-between-wrapper'
+                      v-if="priceGroup.storePostage > 0">
+                    <view>运费：</view>
+                    <view class='money'>+￥{{priceGroup.storePostage}}</view>
+                </view>
+            </view>
+            <view style='height:120rpx;'></view>
+            <view class='footer acea-row row-between-wrapper'>
+                <view>合计:
+                    <text class='font-color'>￥{{totalPrice || 0}}</text>
+                </view>
+                <view class='settlement'
+                      style='z-index:100'
+                      @tap="SubOrder">立即结算</view>
+            </view>
+        </view>
+        <couponListWindow :coupon='coupon'
+                          @ChangCouponsClone="ChangCouponsClone"
+                          :openType='openType'
+                          :cartId='cartId'
+                          @ChangCoupons="ChangCoupons"></couponListWindow>
+        <addressWindow ref="addressWindow"
+                       @changeTextareaStatus="changeTextareaStatus"
+                       :address='address'
+                       :pagesUrl="pagesUrl"
+                       @OnChangeAddress="OnChangeAddress"
+                       @changeClose="changeClose"></addressWindow>
+        <authorize @onLoadFun="onLoadFun"
+                   :isAuto="isAuto"
+                   :isShowAuth="isShowAuth"
+                   @authColse="authColse"></authorize>
+    </view>
 </template>
 <script>
 	import {
@@ -702,6 +754,7 @@
 							signType: jsConfig.signType,
 							paySign: jsConfig.paySign,
 							success: function(res) {
+                                console.log('支付成功------', res)
 								uni.hideLoading();
 								if (that.BargainId || that.combinationId || that.pinkId || that.seckillId)
 									return that.$util.Tips({
@@ -720,6 +773,7 @@
 								});
 							},
 							fail: function(e) {
+                                console.log('支付失败------', e)
 								uni.hideLoading();
 								return that.$util.Tips({
 									title: '取消支付'
@@ -729,9 +783,10 @@
 								});
 							},
 							complete: function(e) {
+                                console.log('支付结束------', e)
 								uni.hideLoading();
 								//关闭当前页面跳转至订单状态
-								if (res.errMsg == 'requestPayment:cancel') return that.$util.Tips({
+								if (e.errMsg == 'requestPayment:cancel') return that.$util.Tips({
 									title: '取消支付'
 								}, {
 									tab: 5,
