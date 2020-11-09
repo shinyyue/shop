@@ -84,7 +84,7 @@
         {
             "path": "pages/auth/index",
             "style": {
-                "navigationBarTitleText": "CRMEB"
+                "navigationBarTitleText": "SHOP"
             }
         },
         //#endif
@@ -496,7 +496,7 @@
     ],
     "globalStyle": {
         "navigationBarTextStyle": "black",
-        "navigationBarTitleText": "crmeb",
+        "navigationBarTitleText": "shop",
         "navigationBarBackgroundColor": "#fff",
         "backgroundColor": "#F8F8F8",
         "titleNView": false

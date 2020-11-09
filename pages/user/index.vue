@@ -83,7 +83,6 @@
 				</view>
 				<view class="iconfont icon-xiangyou"></view>
 			</view>
-			<!-- #endif -->
 			<!-- #ifdef MP -->
 			<button class="item" open-type='contact' hover-class='none'>
 				<view class="left">

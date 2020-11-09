@@ -17,7 +17,7 @@
 			<view class='pictrue' v-if="!is_loading && !addressList.length">
 				<image src='../../static/images/noAddress.png'></image>
 			</view>
-			<view class='addressBnt bg-color' @tap='goAddressPages'>选择其地址</view>
+			<view class='addressBnt bg-color' @tap='goAddressPages'>选择其他地址</view>
 		</view>
 		<view class='mask' catchtouchmove="true" :hidden='address.address==false' @tap='close'></view>
 	</view>

@@ -71,9 +71,7 @@
 			</view>
 		</view>
 		<coupon-window :window='window' :couponList="couponList" @onColse="onColse"></coupon-window>
-		<!-- #ifdef MP -->
 		<authorize @onLoadFun="onLoadFun" :isAuto="isAuto" :isShowAuth="isShowAuth" @authColse="authColse" :isGoIndex="false"></authorize>
-		<!-- #endif -->
 	</view>
 </template>
 
@@ -99,7 +97,6 @@
 	import {
 		getShare 
 	} from '@/api/public.js';
-	import goodList from '@/components/goodList';
 	import promotionGood from '@/components/promotionGood';
 	import couponWindow from '@/components/couponWindow';
 	import ClipboardJS from "@/plugin/clipboard/clipboard.js";
@@ -134,7 +131,6 @@
 	export default {
 		computed: mapGetters(['isLogin', 'uid']),
 		components: {
-			goodList,
 			promotionGood,
 			couponWindow,
 			countDown,
@@ -573,14 +569,6 @@
 					})
 				})
 			},
-			// 直播
-			// getLiveList: function() {
-			// 	getLiveList(1, 20).then(res => {
-			// 		this.liveList = res.data
-			// 	}).catch(res => {
-
-			// 	})
-			// },
 			// 精品推荐
 			getGroomList(onloadH) {
 				this.loading = true
@@ -592,7 +580,6 @@
 				getGroomList(type, this.params).then(({
 					data
 				}) => {
-					console.log(2222, data)
 					this.iSshowH = false 
 					this.loading = false
 					this.goodScroll = data.list.length >= this.params.limit
