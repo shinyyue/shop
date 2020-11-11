@@ -748,13 +748,13 @@
 						that.toPay = true;
 						let packages = 'prepay_id=' + jsConfig.prepayId;
 						uni.requestPayment({
-							timeStamp: jsConfig.timeStamp.toString(),
-							nonceStr: jsConfig.nonceStr,
-							package: packages,
-							signType: jsConfig.signType,
-							paySign: jsConfig.paySign,
+                            provider: 'wxpay',
+                            timeStamp: jsConfig.timeStamp.toString(),
+                            nonceStr: jsConfig.nonceStr,
+                            package: packages,
+                            signType: jsConfig.signType,
+                            paySign: jsConfig.paySign,
 							success: function(res) {
-                                console.log('支付成功------', res)
 								uni.hideLoading();
 								if (that.BargainId || that.combinationId || that.pinkId || that.seckillId)
 									return that.$util.Tips({
@@ -773,7 +773,6 @@
 								});
 							},
 							fail: function(e) {
-                                console.log('支付失败------', e)
 								uni.hideLoading();
 								return that.$util.Tips({
 									title: '取消支付'
@@ -783,7 +782,6 @@
 								});
 							},
 							complete: function(e) {
-                                console.log('支付结束------', e)
 								uni.hideLoading();
 								//关闭当前页面跳转至订单状态
 								if (e.errMsg == 'requestPayment:cancel') return that.$util.Tips({
@@ -793,34 +791,6 @@
 									url: goPages + '&status=0'
 								});
 							},
-						})
-						// #endif
-						// #ifdef H5
-						let jsConfigAgain = jsConfig;
-						let packages = 'prepay_id=' + jsConfigAgain.prepayId;
-						let data = {
-							timestamp:jsConfigAgain.timeStamp,
-							nonceStr:jsConfigAgain.nonceStr,
-							package:packages,
-							signType:jsConfigAgain.signType,
-							paySign:jsConfigAgain.paySign,
-							h5PayUrl:jsConfigAgain.h5PayUrl
-						};
-						this.$wechat.pay(data).then(res => {
-							return that.$util.Tips({
-								title: '支付成功',
-								icon: 'success'
-							}, {
-								tab: 5,
-								url: goPages
-							});
-						}).cache(res => {
-							if (res.errMsg == 'requestPayment:cancel') return that.$util.Tips({
-								title: '取消支付'
-							}, {
-								tab: 5,
-								url: goPages + '&status=0'
-							});
 						})
 						// #endif
 						break;

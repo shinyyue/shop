@@ -35,6 +35,20 @@
                 "navigationStyle": "custom",
                 "navigationBarTextStyle": "#fff"
             }
+        },
+        {
+            "path": "pages/order_pay_status/index",
+            "style": {
+                "navigationBarTitleText": "支付成功"
+            }
+        },
+        {
+            "path": "pages/order_details/index",
+            "style": {
+                "navigationBarTitleText": "订单详情",
+                "navigationBarBackgroundColor": "#e93323",
+                "navigationBarTextStyle": "#fff"
+            }
         }
     ],
     "subPackages": [{

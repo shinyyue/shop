@@ -337,7 +337,6 @@
 		},
 		computed: mapGetters(['isLogin', 'uid', 'chatUrl']),
 		onLoad(options) {
-			// this.getChat(this.uid || '');
 			let that = this
 			var pages = getCurrentPages();
 			if (pages.length <= 1) {
