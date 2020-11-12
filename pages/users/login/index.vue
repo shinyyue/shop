@@ -65,44 +65,6 @@
 				</div>
 			</div>
 		</div>
-		<!-- <div class="whiteBg" v-else>
-			<div class="title">注册账号</div>
-			<div class="list">
-				<div class="item">
-					<div class="acea-row row-middle">
-						<image src="/static/images/phone_1.png"></image>
-						<input type="text" placeholder="输入手机号码" v-model="account" />
-					</div>
-				</div>
-				<div class="item">
-					<div class="acea-row row-middle">
-						<image src="/static/images/code_2.png"></image>
-						<input type="text" placeholder="填写验证码" class="codeIput" v-model="captcha" />
-						<button class="code" :disabled="disabled" :class="disabled === true ? 'on' : ''" @click="code">
-							{{ text }}
-						</button>
-					</div>
-				</div>
-				<div class="item">
-					<div class="acea-row row-middle">
-						<image src="/static/images/code_1.png"></image>
-						<input type="password" placeholder="填写您的登录密码" v-model="password" />
-					</div>
-				</div>
-				<div class="item" v-if="isShowCode">
-					<div class="acea-row row-middle">
-						<image src="/static/images/code_2.png"></image>
-						<input type="text" placeholder="填写验证码" class="codeIput" v-model="codeVal" />
-						<div class="code" @click="again"><img :src="codeUrl" /></div>
-					</div>
-				</div>
-			</div>
-			<div class="logon" @click="register">注册</div>
-			<div class="tip">
-				已有账号?
-				<span @click="formItem = 1" class="font-color-red">立即登录</span>
-			</div>
-		</div> -->
 		<div class="bottom"></div>
 	</div>
 </template>
@@ -221,7 +183,7 @@
 						that.$Cache.clear(BACK_URL);
 						// getUserInfo().then(res => {
 							that.$store.commit("SETUID", res.data.user.uid);
-							if (backUrl === '/pages/index/index' || backUrl === '/pages/order_addcart/order_addcart' || backUrl ===
+							if (backUrl === '/pages/index/index' || backUrl === '/pages/order_addcart/index' || backUrl ===
 								'/pages/user/index') {
 
 								uni.switchTab({
@@ -334,7 +296,7 @@
 						that.$Cache.clear(BACK_URL);
 						getUserInfo().then(res => {
 							that.$store.commit("SETUID", res.data.uid);
-							if (backUrl === '/pages/index/index' || backUrl === '/pages/order_addcart/order_addcart' || backUrl ==='/pages/user/index') {
+							if (backUrl === '/pages/index/index' || backUrl === '/pages/order_addcart/index' || backUrl ==='/pages/user/index') {
 								uni.switchTab({
 									url: backUrl
 								});

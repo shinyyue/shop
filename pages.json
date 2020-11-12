@@ -49,6 +49,18 @@
                 "navigationBarBackgroundColor": "#e93323",
                 "navigationBarTextStyle": "#fff"
             }
+        },
+        {
+            "path": "pages/goods_search/index",
+            "style": {
+                "navigationBarTitleText": "搜索商品"
+            }
+        },
+        {
+            "path": "pages/goods_list/index",
+            "style": {
+                "navigationBarTitleText": "商品列表"
+            }
         }
     ],
     "subPackages": [{
@@ -59,7 +71,8 @@
                 "style": {
                     "navigationBarTitleText": "提交订单"
                 }
-            }, {
+            },
+            {
                 "path": "user_address_list/index",
                 "style": {
                     "navigationBarTitleText": "地址管理"
@@ -69,6 +82,38 @@
                 "path": "user_address/index",
                 "style": {
                     "navigationBarTitleText": "添加地址"
+                }
+            },
+            {
+                "path": "user_sgin/index",
+                "style": {
+                    "navigationBarTitleText": "签到"
+                }
+            },
+            {
+                "path": "user_sgin_list/index",
+                "style": {
+                    "navigationBarTitleText": "签到记录"
+                }
+            },
+            {
+                "path": "order_list/index",
+                "style": {
+                    "navigationBarTitleText": "我的订单"
+                }
+            },
+            {
+                "path": "user_return_list/index",
+                "style": {
+                    "navigationBarTitleText": "退货列表"
+                }
+            },
+            {
+                "path": "user_vip/index",
+                "style": {
+                    "navigationBarTitleText": "会员中心",
+                    "navigationBarBackgroundColor": "#232323",
+                    "navigationBarTextStyle": "#fff"
                 }
             }
         ]

@@ -135,7 +135,7 @@
 				<view class='iconfont icon-shoucang' v-else></view>
 				<view>收藏</view>
 			</view>
-			<navigator open-type='switchTab' class="animated item" :class="animated==true?'bounceIn':''" url='/pages/order_addcart/order_addcart'
+			<navigator open-type='switchTab' class="animated item" :class="animated==true?'bounceIn':''" url='/pages/order_addcart/index'
 			 hover-class="none">
 				<view class='iconfont icon-gouwuche1'>
 					<text class='num bg-color'>{{CartCount || 0}}</text>

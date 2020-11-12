@@ -76,13 +76,13 @@
 					<view class="iconfont icon-xiangyou"></view>
 				</navigator>
 			</block>
-			<view class="item" @click="kefuClick">
+			<!-- <view class="item" @click="kefuClick">
 				<view class="left">
 					<image src="/static/images/user_menu08.png"></image>
 					<text>联系客服</text>
 				</view>
 				<view class="iconfont icon-xiangyou"></view>
-			</view>
+			</view> -->
 			<!-- #ifdef MP -->
 			<button class="item" open-type='contact' hover-class='none'>
 				<view class="left">

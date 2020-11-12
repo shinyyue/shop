@@ -41,7 +41,7 @@ function baseRequest(url, method, data, {
 			header: header,
 			data: data || {},
 			success: (res) => {
-				if (noVerify)
+				if (noVerify) 
 					reslove(res.data, res);
 				else if (res.data.code == 200)
 					reslove(res.data, res);

@@ -16,27 +16,11 @@ function prePage(){
 export function toLogin(push, pathLogin) {
 	store.commit("LOGOUT");
 	let path = prePage();
-	// #ifdef H5
-	path = location.href;
-	// #endif
-	if(!pathLogin)
-		pathLogin = '/page/users/login/index'
+	if(!pathLogin) {
+        pathLogin = '/page/users/login/index'
+    }
 	Cache.set('login_back_url',path);
-	// #ifdef H5 || APP-PLUS
-	if (isWeixin()) {
-		auth.oAuth();
-	} else {
-		if (path !== pathLogin) {
-		 push ? uni.navigateTo({
-		 	url:'/pages/users/login/index'
-		 }) : uni.reLaunch({
-		 	url: '/pages/users/login/index'
-		 });
-		}
-	}
-	// #endif
 }
-
 
 export function checkLogin()
 {
