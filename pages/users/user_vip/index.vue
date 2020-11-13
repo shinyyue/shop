@@ -113,7 +113,7 @@
                                 <view class="info line1">购买商品可获得对应是经验值</view>
                             </view>
                         </view>
-                        <navigator url="/pages/goods_cate/goods_cate"
+                        <navigator url="/pages/goods_cate/index"
                                    class="button"
                                    hover-class="none"
                                    open-type='switchTab'>去获取</navigator>

@@ -1,103 +1,143 @@
 <template>
-	<view class="new-users">
-		<view class="head">
-			<view class="user-card">
-				<view class="bg"></view>
-				<view class="user-info">
-					<image class="avatar" :src='userInfo.avatar' v-if="userInfo.avatar" @click="goEdit()"></image>
-					<image v-else class="avatar" src="/static/images/f.png" mode="" @click="goEdit()"></image>
-					<view class="info">
-						<!-- #ifdef MP -->
-						<view class="name" v-if="!userInfo.uid" @tap="openAuto">
-							请点击授权
-						</view>
-						<!-- #endif -->
-						<view class="name" v-if="userInfo.uid">
-							{{userInfo.nickname}}
-							<view class="vip" v-if="userInfo.vip">
-								<image :src="userInfo.vipIcon" alt="">
-								<view style="margin-left: 10rpx;" class="vip-txt">{{userInfo.vipName}}</view>
-							</view>
-						</view>
-						<view class="num" v-if="userInfo.phone" @click="goEdit()">
-							<view class="num-txt">ID：{{userInfo.uid}}</view>
-							<view class="icon">
-								<image src="/static/images/edit.png" mode=""></image>
-							</view>
-						</view>
-						<view class="phone" v-if="!userInfo.phone && isLogin" @tap="bindPhone">绑定手机号</view>
-					</view>
-				</view>
-				<view class="num-wrapper">
-					<view class="num-item" @click="goMenuPage('/pages/users/user_money/index')">
-						<text class="num">{{Number(userInfo.nowMoney) && Number(userInfo.nowMoney) !== NaN && Number(userInfo.nowMoney).toFixed(2) || 0}}</text>
-						<view class="txt">余额</view>
-					</view>
-					<view class="num-item" @click="goMenuPage('/pages/users/user_integral/index')">
-						<text class="num">{{userInfo.integral || 0}}</text>
-						<view class="txt">积分</view>
-					</view>
-					<view class="num-item" @click="goMenuPage('/pages/users/user_coupon/index')">
-						<text class="num">{{userInfo.couponCount || 0}}</text>
-						<view class="txt">优惠券</view>
-					</view>
-				</view>
-				<view class="sign" @click="goSignIn">签到</view>
-			</view>
-			<view class="order-wrapper">
-				<view class="order-hd flex">
-					<view class="left">订单中心</view>
-					<navigator class="right flex" hover-class="none" url="/pages/users/order_list/index" open-type="navigate">
-						查看全部
-						<text class="iconfont icon-xiangyou"></text>
-					</navigator>
-				</view>
-				<view class="order-bd">
-					<block v-for="(item,index) in orderMenu" :key="index">
-						<navigator class="order-item" hover-class="none" :url="item.url">
-							<view class="pic">
-								<image :src="item.img" mode=""></image>
-								<text class="order-status-num" v-if="item.num > 0">{{ item.num }}</text>
-							</view>
-							<view class="txt">{{item.title}}</view>
-						</navigator>
-					</block>
-				</view>
-			</view>
-		</view>
-		<!-- 会员菜单 -->
-		<view class="user-menus" style="margin-top: 20rpx;">
-			<block v-for="(item,index) in MyMenus" :key="index">
-				<navigator class="item" :url="item.url" hover-class="none" v-if="!(item.url =='/pages/service/index' || (item.url =='/pages/users/user_spread_user/index' && !userInfo.isPromoter))">
-					<view class="left">
-						<image :src="item.pic"></image>
-						<text>{{item.name}}</text>
-					</view>
-					<view class="iconfont icon-xiangyou"></view>
-				</navigator>
-			</block>
-			<!-- <view class="item" @click="kefuClick">
+    <view class="new-users">
+        <view class="head">
+            <view class="user-card">
+                <view class="bg"></view>
+                <view class="user-info">
+                    <image class="avatar"
+                           :src='userInfo.avatar'
+                           v-if="userInfo.avatar"
+                           @click="goEdit()"></image>
+                    <image v-else
+                           class="avatar"
+                           src="/static/images/f.png"
+                           mode=""
+                           @click="goEdit()"></image>
+                    <view class="info">
+                        <!-- #ifdef MP -->
+                        <view class="name"
+                              v-if="!userInfo.uid"
+                              @tap="openAuto">
+                            请点击授权
+                        </view>
+                        <!-- #endif -->
+                        <view class="name"
+                              v-if="userInfo.uid">
+                            {{userInfo.nickname}}
+                            <view class="vip"
+                                  v-if="userInfo.vip">
+                                <image :src="userInfo.vipIcon"
+                                       alt="">
+                                    <view style="margin-left: 10rpx;"
+                                          class="vip-txt">{{userInfo.vipName}}</view>
+                            </view>
+                        </view>
+                        <view class="num"
+                              v-if="userInfo.phone"
+                              @click="goEdit()">
+                            <view class="num-txt">ID：{{userInfo.uid}}</view>
+                            <view class="icon">
+                                <image src="/static/images/edit.png"
+                                       mode=""></image>
+                            </view>
+                        </view>
+                        <view class="phone"
+                              v-if="!userInfo.phone && isLogin"
+                              @tap="bindPhone">绑定手机号</view>
+                    </view>
+                </view>
+                <view class="num-wrapper">
+                    <view class="num-item"
+                          @click="goMenuPage('/pages/users/user_money/index')">
+                        <text class="num">{{Number(userInfo.nowMoney) && Number(userInfo.nowMoney) !== NaN && Number(userInfo.nowMoney).toFixed(2) || 0}}</text>
+                        <view class="txt">余额</view>
+                    </view>
+                    <view class="num-item"
+                          @click="goMenuPage('/pages/users/user_integral/index')">
+                        <text class="num">{{userInfo.integral || 0}}</text>
+                        <view class="txt">积分</view>
+                    </view>
+                    <view class="num-item"
+                          @click="goMenuPage('/pages/users/user_coupon/index')">
+                        <text class="num">{{userInfo.couponCount || 0}}</text>
+                        <view class="txt">优惠券</view>
+                    </view>
+                </view>
+                <view class="sign"
+                      @click="goSignIn">签到</view>
+            </view>
+            <view class="order-wrapper">
+                <view class="order-hd flex">
+                    <view class="left">订单中心</view>
+                    <navigator class="right flex"
+                               hover-class="none"
+                               url="/pages/users/order_list/index"
+                               open-type="navigate">
+                        查看全部
+                        <text class="iconfont icon-xiangyou"></text>
+                    </navigator>
+                </view>
+                <view class="order-bd">
+                    <block v-for="(item,index) in orderMenu"
+                           :key="index">
+                        <navigator class="order-item"
+                                   hover-class="none"
+                                   :url="item.url">
+                            <view class="pic">
+                                <image :src="item.img"
+                                       mode=""></image>
+                                <text class="order-status-num"
+                                      v-if="item.num > 0">{{ item.num }}</text>
+                            </view>
+                            <view class="txt">{{item.title}}</view>
+                        </navigator>
+                    </block>
+                </view>
+            </view>
+        </view>
+        <!-- 会员菜单 -->
+        <view class="user-menus"
+              style="margin-top: 20rpx;">
+            <block v-for="(item,index) in MyMenus"
+                   :key="index">
+                <navigator class="item"
+                           :url="item.url"
+                           hover-class="none"
+                           v-if="!(item.url =='/pages/service/index' || (item.url =='/pages/users/user_spread_user/index' && !userInfo.isPromoter))">
+                    <view class="left">
+                        <image :src="item.pic"></image>
+                        <text>{{item.name}}</text>
+                    </view>
+                    <view class="iconfont icon-xiangyou"></view>
+                </navigator>
+            </block>
+            <!-- <view class="item" @click="kefuClick">
 				<view class="left">
 					<image src="/static/images/user_menu08.png"></image>
 					<text>联系客服</text>
 				</view>
 				<view class="iconfont icon-xiangyou"></view>
 			</view> -->
-			<!-- #ifdef MP -->
-			<button class="item" open-type='contact' hover-class='none'>
-				<view class="left">
-					<image src="/static/images/user_menu08.png"></image>
-					<text>联系客服</text>
-				</view>
-				<view class="iconfont icon-xiangyou"></view>
-			</button>
-			<!-- #endif -->
-		</view>
-		<view style="height: 50rpx;"></view>
-		<!-- #ifdef MP -->
-		<authorize @onLoadFun="onLoadFun" :isAuto="isAuto" :isShowAuth="isShowAuth" @authColse="authColse"></authorize>
-		<!-- #endif -->
-	</view>
+            <!-- #ifdef MP -->
+            <button class="item"
+                    open-type='contact'
+                    hover-class='none'>
+                <view class="left">
+                    <image src="/static/images/user_menu08.png"></image>
+                    <text>联系客服</text>
+                </view>
+                <view class="iconfont icon-xiangyou"></view>
+            </button>
+            <!-- #endif -->
+        </view>
+        <view style="height: 50rpx;"></view>
+        <!-- #ifdef MP -->
+        <authorize @onLoadFun="onLoadFun"
+                   :isAuto="isAuto"
+                   :isShowAuth="isShowAuth"
+                   @authColse="authColse"></authorize>
+        <!-- #endif -->
+    </view>
 </template>
 <script>
 	import {
@@ -174,7 +214,7 @@
 		},
 		onLoad() {
 			let that = this;
-			that.$set(that, 'MyMenus', app.globalData.MyMenus);
+            that.$set(that, 'MyMenus', app.globalData.MyMenus);
 		},
 		onShow: function() {
 			let that = this;
@@ -183,12 +223,9 @@
 				this.getMyMenus();
 				// this.setVisit();
 				this.getOrderData();
-			}else{
-				// #ifdef H5 || APP-PLUS
-				if (that.isLogin == false) {
-					toLogin();
-				}
-				// #endif
+			} else {
+                // todo: 验证接口返回401时，是否有授权弹框
+				this.openAuto();
 			}
 		},
 		methods: {
@@ -284,7 +321,6 @@
 					this.wechatUrl = res.data.routine_my_menus.filter((item) => {
 						return item.url.indexOf('service') !== -1
 					})
-					console.log(this.wechatUrl)
 					this.imgUrls = res.data.routine_my_banner
 				});
 			},
@@ -307,9 +343,7 @@
 						url
 					})
 				}else{
-					// #ifdef MP
-						this.openAuto()
-					// #endif
+					this.openAuto()
 				}
 			}
 		}

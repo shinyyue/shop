@@ -115,6 +115,24 @@
                     "navigationBarBackgroundColor": "#232323",
                     "navigationBarTextStyle": "#fff"
                 }
+            },
+            {
+                "path": "goods_logistics/index",
+                "style": {
+                    "navigationBarTitleText": "物流信息"
+                }
+            },
+            {
+                "path": "user_spread_code/index",
+                "style": {
+                    "navigationBarTitleText": "分销海报"
+                }
+            },
+            {
+                "path": "goods_comment_con/index",
+                "style": {
+                    "navigationBarTitleText": "商品评价"
+                }
             }
         ]
     }],

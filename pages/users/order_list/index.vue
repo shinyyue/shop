@@ -425,7 +425,7 @@
 		text-align: center;
 		font-size: 26rpx;
 		color: #282828;
-		padding: 29rpx 0;
+		padding: 22rpx 0;
 	}
 
 	.my-order .nav .item.on {

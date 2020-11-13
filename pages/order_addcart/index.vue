@@ -115,7 +115,6 @@
 		<!-- #ifdef MP -->
 		<authorize :isAuto="isAuto" :isShowAuth="isShowAuth" @authColse="authColse"></authorize>
 		<!-- #endif -->
-
 	</view>
 </template>
 
