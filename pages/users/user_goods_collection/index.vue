@@ -24,10 +24,7 @@
 			</view>
 			<recommend :hostProduct="hostProduct"></recommend>
 		</view>
-		<!-- #ifdef MP -->
 		<authorize @onLoadFun="onLoadFun" :isAuto="isAuto" :isShowAuth="isShowAuth" @authColse="authColse"></authorize>
-		<!-- #endif -->
-		<home></home>
 	</view>
 </template>
 
@@ -44,17 +41,12 @@
 		toLogin
 	} from '@/libs/login.js';
 	import recommend from '@/components/recommend';
-	// #ifdef MP
-	import authorize from '@/components/Authorize';
-	// #endif
-	import home from '@/components/home';
+    import authorize from '@/components/Authorize';
+    
 	export default {
 		components: {
 			recommend,
-			// #ifdef MP
 			authorize,
-			// #endif
-			home
 		},
 		data() {
 			return {

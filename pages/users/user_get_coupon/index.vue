@@ -58,7 +58,7 @@
 			data() {
 				return {
 					couponsList: [],
-					loading: false,
+					loading: true,
 					loadend: false,
 					loadTitle: '加载更多',//提示语
 					page: 1,

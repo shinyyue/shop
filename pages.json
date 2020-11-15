@@ -145,6 +145,76 @@
                 "style": {
                     "navigationBarTitleText": "收藏商品"
                 }
+            },
+            {
+                "path": "user_money/index",
+                "style": {
+                    "navigationBarTitleText": "我的账户"
+                }
+            },
+            {
+                "path": "user_payment/index",
+                "style": {
+                    "navigationBarTitleText": "余额充值"
+                }
+            },
+            {
+                "path": "user_integral/index",
+                "style": {
+                    "navigationBarTitleText": "积分详情"
+                }
+            },
+            {
+                "path": "user_bill/index",
+                "style": {
+                    "navigationBarTitleText": "账单明细"
+                }
+            },
+            {
+                "path": "user_spread_user/index",
+                "style": {
+                    "navigationBarTitleText": "我的推广",
+                    "navigationBarBackgroundColor": "#e93323",
+                    "navigationBarTextStyle": "#fff"
+                }
+            },
+            {
+                "path": "user_spread_money/index",
+                "style": {
+                    "navigationBarTitleText": "佣金记录",
+                    "navigationBarBackgroundColor": "#e93323",
+                    "navigationBarTextStyle": "#fff"
+                }
+            },
+            {
+                "path": "user_cash/index",
+                "style": {
+                    "navigationBarTitleText": "提现",
+                    "navigationBarBackgroundColor": "#e93323",
+                    "navigationBarTextStyle": "#fff"
+                }
+            },
+            {
+                "path": "user_coupon/index",
+                "style": {
+                    "navigationBarTitleText": "我的优惠券"
+                }
+            },
+            {
+                "path": "promoter-list/index",
+                "style": {
+                    "navigationBarTitleText": "推广人列表",
+                    "navigationBarBackgroundColor": "#e93323",
+                    "navigationBarTextStyle": "#fff"
+                }
+            },
+            {
+                "path": "promoter-order/index",
+                "style": {
+                    "navigationBarTitleText": "推广人订单",
+                    "navigationBarBackgroundColor": "#e93323",
+                    "navigationBarTextStyle": "#fff"
+                }
             }
         ]
     }],

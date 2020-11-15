@@ -101,9 +101,9 @@
             <block v-for="(item,index) in MyMenus"
                    :key="index">
                 <navigator class="item"
-                           :url="item.url"
-                           hover-class="none"
-                           v-if="!(item.url =='/pages/service/index' || (item.url =='/pages/users/user_spread_user/index' && !userInfo.isPromoter))">
+                    :url="item.url"
+                    hover-class="none"
+                    v-if="!(item.url =='/pages/service/index' || (item.url =='/pages/users/user_spread_user/index' && !userInfo.isPromoter))">
                     <view class="left">
                         <image :src="item.pic"></image>
                         <text>{{item.name}}</text>
@@ -215,7 +215,6 @@
 				// this.setVisit();
 				this.getOrderData();
 			} else {
-                // todo: 验证接口返回401时，是否有授权弹框
 				this.openAuto();
 			}
 		},
@@ -225,10 +224,7 @@
 			// 	setVisit({
 			// 		url:'/pages/user/index'
 			// 	}).then(res=>{})
-			// },
-			kefuClick(){
-				location.href = this.wechatUrl[0].wap_url
-			},
+            // },
 			getOrderData(){
 				let that = this;
 				orderData().then(res=>{
@@ -302,10 +298,6 @@
 				if (this.MyMenus.length) return;
 				getMenuList().then(res => {
 					that.$set(that, 'MyMenus', res.data.routine_my_menus);
-					// location.pathname.indexOf('auth') !== -1
-					// console.log( res.data.routine_my_menus.filter( item => {
-					// 	if( item.url.indexOf('service') !== -1 ) return item.wap_url
-					// }))
 					this.wechatUrl = res.data.routine_my_menus.filter((item) => {
 						return item.url.indexOf('service') !== -1
 					})

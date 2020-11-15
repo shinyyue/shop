@@ -1,33 +1,55 @@
 <template>
-	<view class="page-index" :class="{'bgf':navIndex >0}">
-		<view class="mp-header">
-			<view class="sys-head" view :style="{ height: statusBarHeight }"></view>
-			<view class="serch-box" view style="height: 43px;">
-				<view class="serch-wrapper flex">
-					<navigator url="/pages/goods_search/index" class="input" hover-class="none"><text class="iconfont icon-xiazai5"></text>
-						搜索商品</navigator>
-				</view>
-			</view>
-		</view>
-		<!-- 首页展示 -->
-		<view class="page_content" :style="'margin-top:'+ marTop +'px;'" v-if="navIndex == 0">
-			<!-- banner -->
-			<view class="swiper" v-if="imgUrls.length"> 
-				<swiper indicator-dots="true" :autoplay="true" :circular="circular" :interval="interval" :duration="duration"
-				 indicator-color="rgba(255,255,255,0.6)" indicator-active-color="#fff">
-					<block v-for="(item,index) in imgUrls" :key="index">
-						<swiper-item>
-							<navigator :url='item.url' class='slide-navigator acea-row row-between-wrapper' hover-class='none'>
-								<image :src="item.pic" class="slide-image" lazy-load></image>
-							</navigator>
-						</swiper-item>
-					</block>
-				</swiper>
-			</view>
-			<!-- menu -->
-			<view class='nav acea-row' v-if="menus.length">
-				<block v-for="(item,index) in menus" :key="index">
-					<navigator class='item' v-if="index < 4" :url='item.url' open-type='switchTab' hover-class='none'>
+    <view class="page-index"
+          :class="{'bgf':navIndex >0}">
+        <view class="mp-header">
+            <view class="sys-head"
+                  view
+                  :style="{ height: statusBarHeight }"></view>
+            <view class="serch-box"
+                  view
+                  style="height: 43px;">
+                <view class="serch-wrapper flex">
+                    <navigator url="/pages/goods_search/index"
+                               class="input"
+                               hover-class="none"><text class="iconfont icon-xiazai5"></text>
+                        搜索商品</navigator>
+                </view>
+            </view>
+        </view>
+        <!-- 首页展示 -->
+        <view class="page_content"
+              :style="'margin-top:'+ marTop +'px;'"
+              v-if="navIndex == 0">
+            <!-- banner -->
+            <view class="swiper"
+                  v-if="imgUrls.length">
+                <swiper indicator-dots="true"
+                        :autoplay="true"
+                        :circular="circular"
+                        :interval="interval"
+                        :duration="duration"
+                        indicator-color="rgba(255,255,255,0.6)"
+                        indicator-active-color="#fff">
+                    <block v-for="(item,index) in imgUrls"
+                           :key="index">
+                        <swiper-item>
+                            <navigator :url='item.url'
+                                       class='slide-navigator acea-row row-between-wrapper'
+                                       hover-class='none'>
+                                <image :src="item.pic"
+                                       class="slide-image"
+                                       lazy-load></image>
+                            </navigator>
+                        </swiper-item>
+                    </block>
+                </swiper>
+            </view>
+            <!-- menu -->
+            <view class='nav acea-row'
+                  v-if="menus.length">
+                <block v-for="(item,index) in menus"
+                       :key="index">
+                    <!-- <navigator class='item' v-if="index < 4" :url='item.url' open-type='switchTab' hover-class='none'>
 						<view class='pictrue'>
 							<image :src='item.pic'></image>
 						</view>
@@ -38,41 +60,80 @@
 							<image :src='item.pic'></image>
 						</view>
 						<view class="menu-txt">{{item.name}}</view>
-					</navigator>
-				</block>
-			</view>
-			<!-- 超值爆款 -->
-			<view class="explosion">
-				<view class="hd">
-					<image src="/static/images/explosion-title.png" mode=""></image>
-					<view class="txt">美好生活由此开始</view>
-				</view>
-			</view>
-			<!-- 热门商品列表 -->
-			<view class="index-product-wrapper" :class="iSshowH?'on':''">
-				<view class="list-box animated" :class='tempArr.length > 0?"fadeIn on":""'>
-					<view class="item" v-for="(item,index) in tempArr" :key="index" @click="goDetail(item)">
-						<view class="pictrue">
-							<span class="pictrue_log pictrue_log_class" v-if="item.activity && item.activity.type === '1'">秒杀</span>
-							<span class="pictrue_log pictrue_log_class" v-if="item.activity && item.activity.type === '2'">砍价</span>
-							<span class="pictrue_log pictrue_log_class" v-if="item.activity && item.activity.type === '3'">拼团</span>
-							<image :src="item.image" mode=""></image>
-						</view>
-						<view class="text-info">
-							<view class="title line1">{{item.storeName}}</view>
-							<view class="old-price"><text>¥</text>{{item.otPrice}}</view>
-							<view class="price">
-								<text>￥</text>{{item.price}}
-								<view class="txt" v-if="item.checkCoupon">券</view>
-							</view>
-						</view>
-					</view>
-				</view>
-			</view>
-		</view>
-		<coupon-window :window='window' :couponList="couponList" @onColse="onColse"></coupon-window>
-		<authorize @onLoadFun="onLoadFun" :isAuto="isAuto" :isShowAuth="isShowAuth" @authColse="authColse" :isGoIndex="false"></authorize>
-	</view>
+					</navigator> -->
+                    <view @click="jumpTo(item.url)"
+                          class='item'
+                          v-if="index < 4"
+                          :url='item.url'
+                          open-type='switchTab'
+                          hover-class='none'>
+                        <view class='pictrue'>
+                            <image :src='item.pic'></image>
+                        </view>
+                        <view class="menu-txt">{{item.name}}</view>
+                    </view>
+                    <view @click="jumpTo(item.url)"
+                          class='item'
+                          v-else-if="index >= 4 && index < 8"
+                          :url='item.url'
+                          open-type='switchTab'
+                          hover-class='none'>
+                        <view class='pictrue'>
+                            <image :src='item.pic'></image>
+                        </view>
+                        <view class="menu-txt">{{item.name}}</view>
+                    </view>
+                </block>
+            </view>
+            <!-- 超值爆款 -->
+            <view class="explosion">
+                <view class="hd">
+                    <image src="/static/images/explosion-title.png"
+                           mode=""></image>
+                    <view class="txt">美好生活由此开始</view>
+                </view>
+            </view>
+            <!-- 热门商品列表 -->
+            <view class="index-product-wrapper"
+                  :class="iSshowH?'on':''">
+                <view class="list-box animated"
+                      :class='tempArr.length > 0?"fadeIn on":""'>
+                    <view class="item"
+                          v-for="(item,index) in tempArr"
+                          :key="index"
+                          @click="goDetail(item)">
+                        <view class="pictrue">
+                            <span class="pictrue_log pictrue_log_class"
+                                  v-if="item.activity && item.activity.type === '1'">秒杀</span>
+                            <span class="pictrue_log pictrue_log_class"
+                                  v-if="item.activity && item.activity.type === '2'">砍价</span>
+                            <span class="pictrue_log pictrue_log_class"
+                                  v-if="item.activity && item.activity.type === '3'">拼团</span>
+                            <image :src="item.image"
+                                   mode=""></image>
+                        </view>
+                        <view class="text-info">
+                            <view class="title line1">{{item.storeName}}</view>
+                            <view class="old-price"><text>¥</text>{{item.otPrice}}</view>
+                            <view class="price">
+                                <text>￥</text>{{item.price}}
+                                <view class="txt"
+                                      v-if="item.checkCoupon">券</view>
+                            </view>
+                        </view>
+                    </view>
+                </view>
+            </view>
+        </view>
+        <coupon-window :window='window'
+                       :couponList="couponList"
+                       @onColse="onColse"></coupon-window>
+        <authorize @onLoadFun="onLoadFun"
+                   :isAuto="isAuto"
+                   :isShowAuth="isShowAuth"
+                   @authColse="authColse"
+                   :isGoIndex="false"></authorize>
+    </view>
 </template>
 
 <script>
@@ -257,6 +318,11 @@
 			})
 		},
 		methods: {
+            jumpTo(path) {
+                uni.navigateTo({
+                    url: path
+                })
+            },
 			// #ifdef MP
 			getTemlIds() {
 				for (var i in arrTemp) {
@@ -747,7 +813,6 @@
 
 		.page_content {
 			.swiper {
-				background: red;
 				position: relative;
 				width: 100%;
 				height: 350rpx;
