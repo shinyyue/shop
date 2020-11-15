@@ -151,7 +151,6 @@
 				let that = this;
 				getUserInfo().then(res => {
 					that.userInfo = res.data;
-                    // that.levelInfo = res.data.experience;
                     this.levelInfo = res.data.integral;
 				}).catch(function(res) {
 					return that.$util.Tips({

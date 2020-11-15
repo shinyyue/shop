@@ -79,34 +79,6 @@
 						<userEvaluation :reply="reply"></userEvaluation>
 					</block>
 				</view>
-				<!-- 优品推荐 -->
-				<view class="superior" if='good_list.length' id="past2">
-					<view class="title acea-row row-center-wrapper">
-						<image src="../../static/images/ling.png"></image>
-						<view class="titleTxt">优品推荐</view>
-						<image src="../../static/images/ling.png"></image>
-					</view>
-					<view class="slider-banner banner">
-						<swiper indicator-dots="true" :autoplay="autoplay" :circular="circular" :interval="interval" :duration="duration"
-						 indicator-color="#999" indicator-active-color="#e93323" :style="'height:'+clientHeight+'px'">
-							<swiper-item v-for="(item,indexw) in good_list" :key="indexw">
-								<view class="list acea-row row-middle" :id="'list'+indexw">
-									<view class="item" v-for="(val,indexn) in item.list" :key="indexn" @click="goDetail(val)">
-										<view class="pictrue">
-											<image :src="val.image"></image>
-											<span class="pictrue_log pictrue_log_class" v-if="val.activity && val.activity.type === '1'">秒杀</span>
-											<span class="pictrue_log pictrue_log_class" v-if="val.activity && val.activity.type === '2'">砍价</span>
-											<span class="pictrue_log pictrue_log_class" v-if="val.activity && val.activity.type === '3'">拼团</span>
-										</view>
-										<view class="name line1">{{val.storeName}}</view>
-										<view class="money font-color">¥{{val.price}}</view>
-									</view>
-								</view>
-							</swiper-item>
-							<!-- <view class="swiper-pagination" slot="pagination"></view> -->
-						</swiper>
-					</view>
-				</view>
 				<view class='product-intro' id="past3">
 					<view class='title'>产品介绍</view>
 					<view class='conter'>

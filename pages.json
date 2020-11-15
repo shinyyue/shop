@@ -215,6 +215,12 @@
                     "navigationBarBackgroundColor": "#e93323",
                     "navigationBarTextStyle": "#fff"
                 }
+            },
+            {
+                "path": "goods_return/index",
+                "style": {
+                    "navigationBarTitleText": "申请退货"
+                }
             }
         ]
     }],

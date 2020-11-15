@@ -121,10 +121,9 @@
                         :cartInfo="cartInfo"
                         :jump="true"></orderGoods>
             <div class="goodCall">
-                <button open-type='contact'
-                        hover-class='none'>
+                <view @click="concat">
                     <span class="iconfont icon-kefu"></span><span>联系客服</span>
-                </button>
+                </view>
             </div>
             <view class='wrapper'>
                 <view class='item acea-row row-between'>
@@ -244,20 +243,13 @@
                 <view class='bnt bg-color'
                       v-if="status.type==0"
                       @tap='pay_open(orderInfo.orderId)'>立即付款</view>
-                <!-- #ifdef MP -->
-                <view @tap="openSubcribe('/pages/users/goods_return/index?orderId='+orderInfo.orderId)"
-                      class='bnt cancel'
-                      v-else-if="orderInfo.paid === 1 && orderInfo.refundStatus === 0">申请退款</view>
-                <!-- #endif -->
-                <!-- #ifndef MP -->
                 <navigator hover-class="none"
                            :url="'/pages/users/goods_return/index?orderId='+orderInfo.orderId"
                            class='bnt cancel'
-                           v-else-if="orderInfo.paid === true && orderInfo.refundStatus === 0">申请退款</navigator>
-                <!-- #endif -->
-                <view class='bnt bg-color'
-                      v-if="status.class_status==1"
-                      @tap='goJoinPink'>查看拼团</view>
+                           v-if="orderInfo.paid === true && orderInfo.refundStatus === 0">申请退款</navigator>
+                <view @tap="openSubcribe('/pages/users/goods_return/index?orderId='+orderInfo.orderId)"
+                      class='bnt cancel'
+                      v-else-if="orderInfo.paid === 1 && orderInfo.refundStatus === 0">申请退款</view>
                 <navigator class='bnt cancel'
                            v-if="orderInfo.deliveryType == 'express' && status.class_status==3 && status.type==2"
                            hover-class='none'
@@ -750,9 +742,11 @@
 			// #endif
 		},
 		methods: {
-			kefuClick(){
-               location.href = this.chatUrl;
-			},
+            concat() {
+                uni.makePhoneCall({
+					phoneNumber: '000000'
+				})
+            },
 			goGoodCall() {
 				let self = this
 				uni.navigateTo({
