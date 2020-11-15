@@ -111,15 +111,14 @@
                     <view class="iconfont icon-xiangyou"></view>
                 </navigator>
             </block>
-            <button class="item"
-                    open-type='contact'
-                    hover-class='none'>
+            <View class="item"
+                @click="concat">
                 <view class="left">
                     <image src="/static/images/user_menu08.png"></image>
                     <text>联系客服</text>
                 </view>
                 <view class="iconfont icon-xiangyou"></view>
-            </button>
+            </View>
         </view>
         <view style="height: 50rpx;"></view>
         <!-- #ifdef MP -->
@@ -225,6 +224,11 @@
 			// 		url:'/pages/user/index'
 			// 	}).then(res=>{})
             // },
+            concat() {
+                uni.makePhoneCall({
+					phoneNumber: '18621263027'
+				})
+            },
 			getOrderData(){
 				let that = this;
 				orderData().then(res=>{

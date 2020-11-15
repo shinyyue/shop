@@ -10,7 +10,8 @@
 					<view class="start" :class="'star' + Math.round((item.productScore+item.serviceScore)/2)"></view>
 				</view>
 			</view>
-			<view class="time">{{ item.createTime }} {{ item.suk }}</view>
+			<view class="time">{{ item.createTime }}</view>
+            <!-- {{ item.suk }} -->
 			<view class="evaluate-infor">{{ item.comment }}</view>
 			<view class="imgList acea-row">
 				<view class="pictrue" v-for="(itemn, indexn) in item.pics" :key="indexn">

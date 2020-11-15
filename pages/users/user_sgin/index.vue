@@ -105,7 +105,8 @@
 				isAuto: false, //没有授权的不会自动授权
 				isShowAuth: false, //是否隐藏授权
 				day: 0,
-				sign_index: 0
+                sign_index: 0,
+                isSigning: false
 			};
 		},
 		computed: mapGetters(['isLogin']),
@@ -216,8 +217,11 @@
 					sum_sgin_day = that.userInfo.sumSignDay;
 				if (that.userInfo.isDaySign) return this.$util.Tips({
 					title: '您今日已签到!'
-				});
+                });
+                if (this.isSigning) return;
+                this.isSigning = true;
 				setSignIntegral().then(res => {
+                    this.isSigning = false;
 					that.active = true;
 					that.integral = res.data.integral;
 					that.sign_index = (that.sign_index + 1) > that.signSystemList.length ? 1 : that.sign_index + 1;
@@ -226,7 +230,7 @@
 					that.$set(that.userInfo, 'integral', that.$util.$h.Add(that.userInfo.integral, res.data.integral));
 					that.getSignList();
 				}).catch(err => {
-                    console.log(11112, err)
+                    this.isSigning = false;
 					return this.$util.Tips({
 						title: err
 					})

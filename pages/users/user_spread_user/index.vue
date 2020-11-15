@@ -41,14 +41,6 @@
 					<text class='iconfont icon-dingdan'></text>
 					<view>推广人订单</view>
 				</navigator>
-				<navigator url='/pages/users/promoter_rank/index' hover-class="none" class='item acea-row row-center-wrapper row-column'>
-					<text class='iconfont icon-paihang1'></text>
-					<view>推广人排行</view>
-				</navigator>
-				<navigator url='/pages/users/commission_rank/index' hover-class="none" class='item acea-row row-center-wrapper row-column'>
-					<text class='iconfont icon-paihang'></text>
-					<view>佣金排行</view>
-				</navigator>
 			</view>
 		</view>
 		<!-- #ifdef MP -->
