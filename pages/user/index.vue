@@ -111,14 +111,6 @@
                     <view class="iconfont icon-xiangyou"></view>
                 </navigator>
             </block>
-            <!-- <view class="item" @click="kefuClick">
-				<view class="left">
-					<image src="/static/images/user_menu08.png"></image>
-					<text>联系客服</text>
-				</view>
-				<view class="iconfont icon-xiangyou"></view>
-			</view> -->
-            <!-- #ifdef MP -->
             <button class="item"
                     open-type='contact'
                     hover-class='none'>
@@ -128,7 +120,6 @@
                 </view>
                 <view class="iconfont icon-xiangyou"></view>
             </button>
-            <!-- #endif -->
         </view>
         <view style="height: 50rpx;"></view>
         <!-- #ifdef MP -->
@@ -237,9 +228,6 @@
 			// },
 			kefuClick(){
 				location.href = this.wechatUrl[0].wap_url
-				// return this.$util.Tips({
-				// 	title: '客服功能正在开发中......'
-				// });
 			},
 			getOrderData(){
 				let that = this;

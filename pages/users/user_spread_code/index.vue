@@ -1,33 +1,50 @@
 <template>
-	<view>
-		<view class='distribution-posters'>
-				<swiper :indicator-dots="indicatorDots" :autoplay="autoplay" :circular="circular" :interval="interval" :duration="duration"
-			 @change="bindchange" previous-margin="40px" next-margin="40px">
-				<block v-for="(item,index) in spreadList" :key="index">
-					<swiper-item>
-						<image :src="item.pic" class="slide-image" :class="swiperIndex == index ? 'active' : 'quiet'" mode='aspectFill' />
-					</swiper-item>
-				</block>
-			</swiper>
-			<!-- #ifdef MP -->
-			<view class='keep bg-color' @click='savePosterPath'>保存海报</view>
-			<!-- #endif -->
-			<!-- #ifndef MP -->
-			<div class="preserve acea-row row-center-wrapper">
-				<div class="line"></div>
-				<div class="tip">长按保存图片</div>
-				<div class="line"></div>
-			</div>
-			<!-- #endif -->
-		</view>
-		<!-- #ifdef MP -->
-		<authorize @onLoadFun="onLoadFun" :isAuto="isAuto" :isShowAuth="isShowAuth" @authColse="authColse"></authorize>
-		<!-- #endif -->
-		<view class="canvas">
-			<canvas style="width:750px;height:1190px;" canvas-id="canvasOne"></canvas>
-			<canvas style="" canvas-id="qrcode" :style="{width: `${qrcodeSize}px`, height: `${qrcodeSize}px`}" />
-		</view>
-	</view>
+    <view>
+        <view class='distribution-posters'>
+            <swiper :indicator-dots="indicatorDots"
+                    :autoplay="autoplay"
+                    :circular="circular"
+                    :interval="interval"
+                    :duration="duration"
+                    @change="bindchange"
+                    previous-margin="40px"
+                    next-margin="40px">
+                <block v-for="(item,index) in spreadList"
+                       :key="index">
+                    <swiper-item>
+                        <image :src="item.pic"
+                               class="slide-image"
+                               :class="swiperIndex == index ? 'active' : 'quiet'"
+                               mode='aspectFill' />
+                    </swiper-item>
+                </block>
+            </swiper>
+            <!-- #ifdef MP -->
+            <view class='keep bg-color'
+                  @click='savePosterPath'>保存海报</view>
+            <!-- #endif -->
+            <!-- #ifndef MP -->
+            <div class="preserve acea-row row-center-wrapper">
+                <div class="line"></div>
+                <div class="tip">长按保存图片</div>
+                <div class="line"></div>
+            </div>
+            <!-- #endif -->
+        </view>
+        <!-- #ifdef MP -->
+        <authorize @onLoadFun="onLoadFun"
+                   :isAuto="isAuto"
+                   :isShowAuth="isShowAuth"
+                   @authColse="authColse"></authorize>
+        <!-- #endif -->
+        <view class="canvas">
+            <canvas style="width:750px;height:1190px;"
+                    canvas-id="canvasOne"></canvas>
+            <canvas style=""
+                    canvas-id="qrcode"
+                    :style="{width: `${qrcodeSize}px`, height: `${qrcodeSize}px`}" />
+        </view>
+    </view>
 </template>
 
 <script>
@@ -55,7 +72,9 @@
 	} from "@/api/public";
 	export default {
 		components: {
+			// #ifdef MP
 			authorize,
+			// #endif
 		},
 		data() {
 			return {
@@ -114,10 +133,10 @@
 					mask: true
 				});
 				let that = this;
-                let spreadList = [];
+				let spreadList = [];
 				images.forEach((item,index)=>{
 					imageBase64({url:item.pic}).then(res=>{
-                        spreadList[index] = res.data.code;
+						spreadList[index] = res.data.code;
 						that.$set(that,'base64List',spreadList);
 						that.$set(that, 'poster', spreadList[0]);
 						that.userInfos();
@@ -133,7 +152,9 @@
 				}
 				getQrcode(data).then(res=>{
 					that.PromotionCode = res.data.code;
-					that.PosterCanvas(that.base64List[0], res.data.code, that.userInfo.nickname,0);
+					// let image = '../../../static/images/aa.jpg';
+					// that.PosterCanvas(image, res.data.code, that.userInfo.nickname,0);
+					that.PosterCanvas(this.base64List[0], res.data.code, that.userInfo.nickname,0);
 				})
 			},
 			// 生成二维码；
@@ -147,6 +168,8 @@
 					margin: 10,
 					success: res => {
 						that.PromotionCode = res;
+						// let image = '../../../static/images/aa.jpg';
+						// that.PosterCanvas(image, that.PromotionCode, that.userInfo.nickname,0);
 						that.PosterCanvas(this.base64List[0], that.PromotionCode, that.userInfo.nickname,0);
 					},
 					complete: () => {},
@@ -160,8 +183,7 @@
 			PosterCanvas: function(arrImages, code, nickname,index) {
 				let context = uni.createCanvasContext('canvasOne')
 				context.clearRect(0, 0, 0, 0);
-                let that = this;
-                console.log(9999, arrImages)
+				let that = this;
 				uni.getImageInfo({
 					src: arrImages,
 					success: function(image) {
@@ -188,7 +210,6 @@
 						})
 					},
 					fail: function(err) {
-                        console.log(3334, err)
 						uni.hideLoading();
 						that.$util.Tips({
 							title: '无法获取图片信息'
@@ -212,6 +233,8 @@
 				this.swiperIndex = index;
 				this.$set(this, 'poster', base64List[index]);
 				this.PosterCanvas(base64List[index], this.PromotionCode, this.userInfo.nickname,index);
+				// let aa = ['../../../static/images/aa.jpg','../../../static/images/aa.jpg','../../../static/images/aa.jpg'];
+				// this.PosterCanvas(aa[index], this.PromotionCode, this.userInfo.nickname,index);
 			},
 			// 点击保存海报
 			savePosterPath: function() {
@@ -297,7 +320,7 @@
 			},
 			userInfos() {
 				let that = this;
-				getUserInfo().then(res => { 
+				getUserInfo().then(res => {
 					that.userInfo = res.data;
 					// #ifdef H5
 					that.make();
@@ -325,7 +348,7 @@
 					title: '获取中',
 					mask: true,
 				})
-				spreadBanner({ 
+				spreadBanner({
 					page: 1,
 					limit: 5
 				}).then(res => {

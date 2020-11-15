@@ -1,38 +1,25 @@
 <template>
     <view class="memberVip">
         <view class="bg">
-            <!-- <view class="header">
-                <view class="picTxt acea-row row-middle">
-                    <view class="pictrue">
-                        <image :src="userInfo.avatar"></image>
-                    </view>
-                    <view class="text acea-row row-middle">
-                        <view class="name line1">{{userInfo.nickname}}</view>
-                        <view class="vip"
-                              v-if='userInfo.vip'>
-                            <image :src="userInfo.vipIcon"></image>{{userInfo.vipName}}
-                        </view>
-                    </view>
-                </view>
-            </view> -->
             <view class="experience">
                 <view class="picTxt acea-row row-middle">
                     <view class="pictrue">
                         <image class="avator-img"
                                :src="userInfo.avatar"></image>
                     </view>
-                    <view class="text acea-row row-middle">
+                    <view class="user-info">
                         <view class="name line1">{{userInfo.nickname}}</view>
+                        <view class="vip">
+                            <image class="vip-icon"
+                                :src="userInfo.vipIcon"></image>
+                            <view>{{userInfo.vipName}}</view>
+                        </view>
                     </view>
                 </view>
-                <view class="vip"
-                      v-if='userInfo.vip'>
-                    <image class="vip-icon"
-                           :src="userInfo.vipIcon"></image>
-                    {{userInfo.vipName}}
+                <view class="vip-experence">
+                    <view class="title">当前经验值</view>
+				    <view class="num">{{levelInfo}}</view>
                 </view>
-                <!-- <view class="title">当前经验值</view>
-				<view class="num">{{levelInfo}}</view> -->
                 <view class="axis">
                     <view class="bar">
                         <view class="barCon">
@@ -55,38 +42,6 @@
                               :key="index">{{item.experience}}</view>
                     </view>
                 </view>
-                <!-- <view class="vipList acea-row">
-					<view class="item">
-						<view class="pictrue">
-							<image src="./../static/vip01.png"></image>
-						</view>
-						<view class="name">会员折扣</view>
-					</view>
-					<view class="item">
-						<view class="pictrue">
-							<image src="./../static/vip02.png"></image>
-						</view>
-						<view class="name">专属徽章</view>
-					</view>
-					<view class="item">
-						<view class="pictrue">
-							<image src="./../static/vip03.png"></image>
-						</view>
-						<view class="name">会员升级</view>
-					</view>
-					<view class="item">
-						<view class="pictrue">
-							<image src="./../static/vip04.png"></image>
-						</view>
-						<view class="name">经验积累</view>
-					</view>
-					<view class="item">
-						<view class="pictrue">
-							<image src="./../static/vip05.png"></image>
-						</view>
-						<view class="name">更多特权</view>
-					</view>
-				</view> -->
             </view>
             <view class="module">
                 <view class="public_title acea-row row-middle">
@@ -113,7 +68,7 @@
                                 <view class="info line1">购买商品可获得对应是经验值</view>
                             </view>
                         </view>
-                        <navigator url="/pages/goods_cate/index"
+                        <navigator url="/pages/goods_cate/goods_cate"
                                    class="button"
                                    hover-class="none"
                                    open-type='switchTab'>去获取</navigator>
@@ -196,7 +151,8 @@
 				let that = this;
 				getUserInfo().then(res => {
 					that.userInfo = res.data;
-					that.levelInfo = res.data.experience;
+                    // that.levelInfo = res.data.experience;
+                    this.levelInfo = res.data.integral;
 				}).catch(function(res) {
 					return that.$util.Tips({
 						title: res.msg
@@ -275,10 +231,19 @@
 				padding: 22rpx 27rpx;
 				box-sizing: border-box;
                 .avator-img {
-                    width: 80rpx;
-                    height: 80rpx;
-                    border-radius: 80rpx;
+                    width: 120rpx;
+                    height: 120rpx;
+                    border-radius: 120rpx;
                     margin-right: 20rpx;
+                }
+
+                .vip-experence {
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: flex-start;
+                    align-items: center;
+                    margin-top: 30rpx;
+                    margin-bottom: 20rpx;
                 }
 
 				.title {
@@ -287,9 +252,9 @@
 				}
 
 				.num {
-					font-size: 60rpx;
+					font-size: 40rpx;
 					color: #775C29;
-					margin-top: 6rpx;
+					margin-left: 10rpx;
 				}
 
 				.axis {
@@ -374,8 +339,8 @@
 				}
 
                 .vip-icon {
-                    width: 10rpx;
-                    height: 10rpx;
+                    width: 30rpx;
+                    height: 30rpx;
                     margin-right: 10rpx;
                 }
 			}
@@ -499,5 +464,19 @@
 				}
 			}
 		}
+
+        .vip {
+            display: flex;
+            flex-direction: 'row';
+            justify-content: flex-start;
+            align-items: center;
+        }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
 	}
 </style>
