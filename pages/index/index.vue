@@ -490,7 +490,7 @@
 					uni.getSetting({
 						success(res) {
 							if (!res.authSetting['scope.userInfo']) {
-								that.window = that.couponList.length ? true : false;
+								that.window = that.couponList && that.couponList.length ? true : false;
 							} else {
 								that.window = false;
 								that.iShidden = true;

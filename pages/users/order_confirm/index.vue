@@ -449,7 +449,6 @@
 					shippingType: parseInt(shippingType) + 1,
 					payType: this.payType
 				}).then(res => {
-					console.log(222, res)
 					let result = res.data.result.result;
 					if (result) {
 						this.totalPrice = result.orderId.payPrice;

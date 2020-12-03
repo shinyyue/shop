@@ -19,24 +19,18 @@
                     </swiper-item>
                 </block>
             </swiper>
-            <!-- #ifdef MP -->
             <view class='keep bg-color'
                   @click='savePosterPath'>保存海报</view>
-            <!-- #endif -->
-            <!-- #ifndef MP -->
             <div class="preserve acea-row row-center-wrapper">
                 <div class="line"></div>
                 <div class="tip">长按保存图片</div>
                 <div class="line"></div>
             </div>
-            <!-- #endif -->
         </view>
-        <!-- #ifdef MP -->
         <authorize @onLoadFun="onLoadFun"
                    :isAuto="isAuto"
                    :isShowAuth="isShowAuth"
                    @authColse="authColse"></authorize>
-        <!-- #endif -->
         <view class="canvas">
             <canvas style="width:750px;height:1190px;"
                     canvas-id="canvasOne"></canvas>
@@ -48,9 +42,7 @@
 </template>
 
 <script>
-	// #ifdef H5
-	import uQRCode from '@/js_sdk/Sansnn-uQRCode/uqrcode.js'
-	// #endif
+    import uQRCode from '@/js_sdk/uqrCode/uqrCode.js'
 	import {
 		getUserInfo,
 		spreadBanner
@@ -72,9 +64,7 @@
 	} from "@/api/public";
 	export default {
 		components: {
-			// #ifdef MP
 			authorize,
-			// #endif
 		},
 		data() {
 			return {
@@ -93,29 +83,24 @@
 				imagePath: '',
 				qrcodeSize: 1000,
 				PromotionCode: '',
-				base64List: []
+                base64List: [],
+                uQRCode: '',
 			};
 		},
 		computed: mapGetters(['isLogin']),
 		onLoad() {
 			if (this.isLogin) {
-				// #ifdef H5
-				this.userSpreadBannerList();
-				// #endif
+                this.userSpreadBannerList();
+                this.userInfos();
 			} else {
-				// #ifdef H5 || APP-PLUS
 				toLogin();
-				// #endif 
-				// #ifdef MP
 				this.isAuto = true;
 				this.$set(this, 'isShowAuth', true)
-				// #endif
 			}
 		},
 		/**
 		 * 用户点击右上角分享
 		 */
-		// #ifdef MP
 		onShareAppMessage: function() {
 			return {
 				title: this.userInfo.nickname + '-分销海报',
@@ -123,102 +108,80 @@
 				path: '/pages/index/index?spid=' + this.userInfo.uid,
 			};
 		},
-		// #endif
 		onReady() {
 		},
 		methods: {
-			getImageBase64:function(images){
-				uni.showLoading({
-					title: '海报生成中',
-					mask: true
-				});
-				let that = this;
-				let spreadList = [];
-				images.forEach((item,index)=>{
-					imageBase64({url:item.pic}).then(res=>{
-						spreadList[index] = res.data.code;
-						that.$set(that,'base64List',spreadList);
-						that.$set(that, 'poster', spreadList[0]);
-						that.userInfos();
-					})
-				})
-			},
 			// 小程序二维码
 			getQrcode(){
-				let that = this;
 				let data = {
-					pid: that.userInfo.uid,
+					pid: this.userInfo.uid,
 					path: '/pages/index/index'
 				}
 				getQrcode(data).then(res=>{
-					that.PromotionCode = res.data.code;
-					// let image = '../../../static/images/aa.jpg';
-					// that.PosterCanvas(image, res.data.code, that.userInfo.nickname,0);
-					that.PosterCanvas(this.base64List[0], res.data.code, that.userInfo.nickname,0);
+                    this.$set(this, 'PromotionCode', res.data.code)
+					this.PosterCanvas(this.spreadList[0].pic, res.data.code, this.userInfo.nickname,0);
 				})
-			},
+            },
 			// 生成二维码；
-			make() {
-				let that = this;
-				let href = location.href.split('/pages')[0];
-				uQRCode.make({
-					canvasId: 'qrcode',
-					text: href+'/pages/index/index?spread=' + that.userInfo.uid,
-					size: this.qrcodeSize,
-					margin: 10,
-					success: res => {
-						that.PromotionCode = res;
-						// let image = '../../../static/images/aa.jpg';
-						// that.PosterCanvas(image, that.PromotionCode, that.userInfo.nickname,0);
-						that.PosterCanvas(this.base64List[0], that.PromotionCode, that.userInfo.nickname,0);
-					},
-					complete: () => {},
-					fail: res => {
-						that.$util.Tips({
-							title: '海报二维码生成失败！'
-						});
-					}
-				})
-			},
-			PosterCanvas: function(arrImages, code, nickname,index) {
+			// make() {
+			// 	let that = this;
+			// 	let href = location.href.split('/pages')[0];
+			// 	uQRCode.make({
+			// 		canvasId: 'qrcode',
+			// 		text: href+'/pages/index/index?spread=' + that.userInfo.uid,
+			// 		size: this.qrcodeSize,
+			// 		margin: 10,
+			// 		success: res => {
+			// 			that.PromotionCode = res;
+			// 			// let image = '../../../static/images/aa.jpg';
+			// 			// that.PosterCanvas(image, that.PromotionCode, that.userInfo.nickname,0);
+			// 			that.PosterCanvas(this.base64List[0], that.PromotionCode, that.userInfo.nickname,0);
+			// 		},
+			// 		complete: () => {},
+			// 		fail: res => {
+			// 			that.$util.Tips({
+			// 				title: '海报二维码生成失败！'
+			// 			});
+			// 		}
+			// 	})
+			// },
+			PosterCanvas(arrImages, code, nickname,index) {
+                let that = this;
 				let context = uni.createCanvasContext('canvasOne')
 				context.clearRect(0, 0, 0, 0);
-				let that = this;
 				uni.getImageInfo({
 					src: arrImages,
-					success: function(image) {
-						context.drawImage(arrImages, 0, 0, 750, 1190);
-						context.save();
-						context.drawImage(code, 110, 925, 140, 140);
+					success: (image) => {
+                        context.drawImage(arrImages, 0, 0, 750, 1190);
+                        context.save();
+                        context.drawImage(code, 110, 925, 140, 140);
+                        // context.drawImage(arrImages, 0, 0, 750, 1190);
 						context.restore();
+                        
 						context.setFontSize(28);
 						context.fillText(nickname, 270, 980);
 						context.fillText('邀请您加入', 270, 1020);
-						context.draw(true,function(){
+						context.draw(true,() => {
 							uni.canvasToTempFilePath({
 							  destWidth: 750,
 							  destHeight: 1190,
 							  canvasId: 'canvasOne',
 							  fileType: 'jpg',
-							  success: function(res) {
-							    // 在H5平台下，tempFilePath 为 base64
+							  success: (res) => {
 								uni.hideLoading();
-								that.imagePath = res.tempFilePath;
-								that.spreadList[index].pic = res.tempFilePath;
+                                that.spreadList[index].pic = res.tempFilePath;
 							  } 
 							})
 						})
 					},
-					fail: function(err) {
+					fail: (err) => {
 						uni.hideLoading();
-						that.$util.Tips({
+						this.$util.Tips({
 							title: '无法获取图片信息'
 						});
 					}
 				});
 			},
-
-
 			onLoadFun: function(e) {
 				this.$set(this, 'userInfo', e);
 				this.userSpreadBannerList();
@@ -228,13 +191,11 @@
 				this.isShowAuth = e
 			},
 			bindchange(e) {
-				let base64List = this.base64List;
+				// let base64List = this.base64List;
 				let index = e.detail.current;
 				this.swiperIndex = index;
-				this.$set(this, 'poster', base64List[index]);
-				this.PosterCanvas(base64List[index], this.PromotionCode, this.userInfo.nickname,index);
-				// let aa = ['../../../static/images/aa.jpg','../../../static/images/aa.jpg','../../../static/images/aa.jpg'];
-				// this.PosterCanvas(aa[index], this.PromotionCode, this.userInfo.nickname,index);
+                // this.$set(this, 'poster', base64List[index]);
+				this.PosterCanvas(this.spreadList[index].pic, this.PromotionCode, this.userInfo.nickname,index);
 			},
 			// 点击保存海报
 			savePosterPath: function() {
@@ -319,29 +280,22 @@
 				})
 			},
 			userInfos() {
-				let that = this;
 				getUserInfo().then(res => {
-					that.userInfo = res.data;
-					// #ifdef H5
-					that.make();
-					that.setShareInfoStatus();
-					// #endif
-					// #ifdef MP
-					that.getQrcode();
-					// #endif
+					this.userInfo = res.data;
+					this.getQrcode();
 				})
 			},
-			setShareInfoStatus: function() {
-				if (this.$wechat.isWeixin()) {
-					let configAppMessage = {
-						desc: '分销海报',
-						title: this.userInfo.nickname + '-分销海报',
-						link: '/pages/index/index?spread=' + this.userInfo.uid,
-						imgUrl: this.spreadList[0].pic
-					};
-					this.$wechat.wechatEvevt(["updateAppMessageShareData", "updateTimelineShareData"], configAppMessage)
-				}
-			},
+			// setShareInfoStatus: function() {
+			// 	if (this.$wechat.isWeixin()) {
+			// 		let configAppMessage = {
+			// 			desc: '分销海报',
+			// 			title: this.userInfo.nickname + '-分销海报',
+			// 			link: '/pages/index/index?spread=' + this.userInfo.uid,
+			// 			imgUrl: this.spreadList[0].pic
+			// 		};
+			// 		this.$wechat.wechatEvevt(["updateAppMessageShareData", "updateTimelineShareData"], configAppMessage)
+			// 	}
+			// },
 			userSpreadBannerList: function() {
 				let that = this;
 				uni.showLoading({
@@ -354,7 +308,6 @@
 				}).then(res => {
 					uni.hideLoading();
 					that.$set(that, 'spreadList', res.data);
-					that.getImageBase64(res.data);
 				}).catch(err => {
 					uni.hideLoading();
 				});
