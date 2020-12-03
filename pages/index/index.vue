@@ -881,12 +881,12 @@
 					flex-direction: column;
 					align-items: center;
 					justify-content: center;
-					width: 20%;
+					width: 25%;
 					margin-top: 30rpx;
 
 					image {
-						width: 82rpx;
-						height: 82rpx;
+						width: 120rpx;
+						height: 120rpx;
 					}
 				}
 			}
@@ -1358,7 +1358,7 @@
 				swiper-item,
 				.slide-image {
 					width: 100%;
-					height: 240rpx;
+					height: 305rpx;
 					border-radius: 12rpx;
 				}
 			}
@@ -1519,8 +1519,8 @@
 	}
 
 	.productList .list .item .pictrue.on {
-		width: 180rpx;
-		height: 180rpx;
+		width: 220rpx;
+		height: 220rpx;
 	}
 
 	.productList .list .item .pictrue image {

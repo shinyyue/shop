@@ -61,7 +61,8 @@
 				isShowAuth: false ,//是否隐藏授权
 				hotScroll:false,
 				hotPage:1,
-				hotLimit:10
+                hotLimit:10,
+                isLoading: false
 			};
 		},
 		computed: mapGetters(['isLogin']),
@@ -88,9 +89,9 @@
 		/**
 		 * 页面上拉触底事件的处理函数
 		 */
-		onReachBottom: function() {
-			this.get_user_collect_product();
-		},
+		// onReachBottom: function() {
+		// 	this.get_user_collect_product();
+		// },
 		methods: {
 			/**
 			 * 授权回调
@@ -148,20 +149,20 @@
 			 * 获取我的推荐
 			 */
 			get_host_product: function() {
-				let that = this;
-				if(that.hotScroll) return
+                if(this.hotScroll || this.isLoading) return
+                this.$set(this, 'isLoading', true)
 				getProductHot(
-					that.hotPage,
-					that.hotLimit,
+					this.hotPage,
+					this.hotLimit,
 				).then(res => {
-					that.hotPage++
-					that.hotScroll = res.data.list.length<that.hotLimit
-					that.hostProduct = that.hostProduct.concat(res.data.list)
-				});
+					this.hotPage++
+                    this.$set(this, 'hotScroll', res.data.list.length<this.hotLimit)
+                    this.$set(this, 'isLoading', false)
+					this.hostProduct = this.hostProduct.concat(res.data.list)
+				}).catch(err => {
+                    this.$set(this, 'isLoading', false)
+                });
 			}
-		},
-		onReachBottom() {
-			this.get_host_product();
 		}
 	}
 </script>
