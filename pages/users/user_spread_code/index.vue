@@ -154,13 +154,13 @@
 					success: (image) => {
                         context.drawImage(arrImages, 0, 0, 750, 1190);
                         context.save();
-                        context.drawImage(code, 110, 925, 140, 140);
+                        context.drawImage(code, 110, 925, 200, 200);
                         // context.drawImage(arrImages, 0, 0, 750, 1190);
 						context.restore();
                         
 						context.setFontSize(28);
-						context.fillText(nickname, 270, 980);
-						context.fillText('邀请您加入', 270, 1020);
+						context.fillText(nickname, 340, 980);
+						context.fillText('邀请您加入', 340, 1020);
 						context.draw(true,() => {
 							uni.canvasToTempFilePath({
 							  destWidth: 750,
@@ -191,17 +191,15 @@
 				this.isShowAuth = e
 			},
 			bindchange(e) {
-				// let base64List = this.base64List;
 				let index = e.detail.current;
 				this.swiperIndex = index;
-                // this.$set(this, 'poster', base64List[index]);
 				this.PosterCanvas(this.spreadList[index].pic, this.PromotionCode, this.userInfo.nickname,index);
 			},
 			// 点击保存海报
-			savePosterPath: function() {
+			savePosterPath() {
 				let that = this;
 				uni.downloadFile({
-					url: that.poster,
+					url: this.spreadList[this.swiperIndex].pic,
 					success(resFile) {
 						if (resFile.statusCode === 200) {
 							uni.getSetting({
