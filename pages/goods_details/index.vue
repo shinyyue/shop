@@ -90,18 +90,10 @@
 			</scroll-view>
 		</view>
 		<view class='footer acea-row row-between-wrapper'>
-			<!-- #ifdef MP -->
-			<button open-type="contact" hover-class='none' class='item'>
+			<button open-type="contact" @click="concat" hover-class='none' class='item'>
 				<view class='iconfont icon-kefu'></view>
 				<view>客服</view>
 			</button>
-			<!-- #endif -->
-			<!-- #ifndef MP -->
-			<view class="item" @click="kefuClick">
-				<view class="iconfont icon-kefu"></view>
-				<view>客服</view>
-			</view>
-			<!-- #endif -->
 			<view @click="setCollect" class='item'>
 				<view class='iconfont icon-shoucang1' v-if="storeInfo.userCollect"></view>
 				<view class='iconfont icon-shoucang' v-else></view>
@@ -375,6 +367,11 @@
 		},
 		// #endif
 		methods: {
+            concat() {
+                uni.makePhoneCall({
+					phoneNumber: '076928826746'
+				})
+            },
 			getChat(uid){
 				console.log(this.uid)
 				window.yzf && window.yzf.init({
@@ -395,12 +392,6 @@
 				      selector: 'chat-btn',
 				      callback: function(type, data){}
 				    })
-			},
-			kefuClick(){
-				location.href = this.chatUrl;
-				// return this.$util.Tips({
-				// 	title: '客服功能正在开发中......'
-				// });
 			},
 			closeChange: function() {
 				this.$set(this.sharePacket, 'isState', true);

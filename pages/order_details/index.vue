@@ -708,7 +708,6 @@
 		},
 		computed: mapGetters(['isLogin', 'chatUrl']),
 		onLoad: function(options) {
-            console.log(11111, options)
 			if (!options.order_id && !options.uniId) return this.$util.Tips({title:'缺少参数'},{tab:3,url:1});
 			   this.$set(this, 'order_id', options.order_id);
 		},
@@ -744,7 +743,7 @@
 		methods: {
             concat() {
                 uni.makePhoneCall({
-					phoneNumber: '000000'
+					phoneNumber: '076928826746'
 				})
             },
 			goGoodCall() {

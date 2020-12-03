@@ -1,12 +1,9 @@
 <template>
-    <view class="page-index"
-          :class="{'bgf':navIndex >0}">
+	<view class="page-index" :class="{'bgf':navIndex >0}">
         <view class="mp-header">
             <view class="sys-head"
-                  view
                   :style="{ height: statusBarHeight }"></view>
             <view class="serch-box"
-                  view
                   style="height: 43px;">
                 <view class="serch-wrapper flex">
                     <navigator url="/pages/goods_search/index"
@@ -17,9 +14,7 @@
             </view>
         </view>
         <!-- 首页展示 -->
-        <view class="page_content"
-              :style="'margin-top:'+ marTop +'px;'"
-              v-if="navIndex == 0">
+		<view class="page_content" :style="'margin-top:'+marTop+'px;'" v-if="navIndex == 0">
             <!-- banner -->
             <view class="swiper"
                   v-if="imgUrls.length">
@@ -45,95 +40,120 @@
                 </swiper>
             </view>
             <!-- menu -->
-            <view class='nav acea-row'
-                  v-if="menus.length">
-                <block v-for="(item,index) in menus"
-                       :key="index">
-                    <!-- <navigator class='item' v-if="index < 4" :url='item.url' open-type='switchTab' hover-class='none'>
+			<view class='nav acea-row' v-if="menus.length">
+				<block v-for="(item,index) in menus" :key="index">
+					<navigator class='item' v-if="item.show == '1'" :url='item.url' open-type='switchTab' hover-class='none'>
 						<view class='pictrue'>
 							<image :src='item.pic'></image>
 						</view>
 						<view class="menu-txt">{{item.name}}</view>
 					</navigator>
-					<navigator class='item' v-else-if="index >= 4 && index < 8" :url='item.url' open-type='switchTab' hover-class='none'>
+					<navigator class='item' v-else :url='item.url' hover-class='none'>
 						<view class='pictrue'>
 							<image :src='item.pic'></image>
 						</view>
 						<view class="menu-txt">{{item.name}}</view>
-					</navigator> -->
-                    <view @click="jumpTo(item.url)"
-                          class='item'
-                          v-if="index < 4"
-                          :url='item.url'
-                          open-type='switchTab'
-                          hover-class='none'>
-                        <view class='pictrue'>
-                            <image :src='item.pic'></image>
-                        </view>
-                        <view class="menu-txt">{{item.name}}</view>
-                    </view>
-                    <view @click="jumpTo(item.url)"
-                          class='item'
-                          v-else-if="index >= 4 && index < 8"
-                          :url='item.url'
-                          open-type='switchTab'
-                          hover-class='none'>
-                        <view class='pictrue'>
-                            <image :src='item.pic'></image>
-                        </view>
-                        <view class="menu-txt">{{item.name}}</view>
-                    </view>
+					</navigator>
                 </block>
             </view>
             <!-- 超值爆款 -->
             <view class="explosion">
                 <view class="hd">
-                    <image src="/static/images/explosion-title.png"
-                           mode=""></image>
+					<image src="/static/images/explosion-title.png" mode=""></image>
                     <view class="txt">美好生活由此开始</view>
                 </view>
+				<view class="bd">
+					<navigator class="item" v-for="(item,index) in explosiveMoney" :key="index" :url="'/pages/columnGoods/HotNewGoods/index?type='+item.type"
+					 hover-class='none'>
+						<view class="con-box">
+							<view class="title line1">{{item.title}}</view>
+							<view class="con line2">{{item.info}}</view>
+							<view class="go">GO！<image src="/static/images/right-icon.png" mode=""></image>
             </view>
-            <!-- 热门商品列表 -->
-            <view class="index-product-wrapper"
-                  :class="iSshowH?'on':''">
-                <view class="list-box animated"
-                      :class='tempArr.length > 0?"fadeIn on":""'>
-                    <view class="item"
-                          v-for="(item,index) in tempArr"
-                          :key="index"
-                          @click="goDetail(item)">
+						</view>
+						<image :src="item.image"></image>
+					</navigator>
+				</view>
+			</view>
+			<!-- 首页推荐 -->
+			<view class="index-product-wrapper" :class="iSshowH?'on':''">
+				<view class="nav-bd">
+					<view class="item" v-for="(item,index) in explosiveMoney" :key="index" :index="item.id" :class="{active:index == ProductNavindex}"
+					 @click="ProductNavTab(item,index)">
+						<view class="txt">{{item.title}}</view>
+						<view class="label">{{item.info}}</view>
+					</view>
+				</view>
+				<!-- 首发新品 -->
+				<view class="list-box animated" :class='tempArr.length > 0?"fadeIn on":""'>
+					<view class="item" v-for="(item,index) in tempArr" :key="index" @click="goDetail(item)">
                         <view class="pictrue">
-                            <span class="pictrue_log pictrue_log_class"
-                                  v-if="item.activity && item.activity.type === '1'">秒杀</span>
-                            <span class="pictrue_log pictrue_log_class"
-                                  v-if="item.activity && item.activity.type === '2'">砍价</span>
-                            <span class="pictrue_log pictrue_log_class"
-                                  v-if="item.activity && item.activity.type === '3'">拼团</span>
-                            <image :src="item.image"
-                                   mode=""></image>
+							<span class="pictrue_log pictrue_log_class" v-if="item.activity && item.activity.type === '1'">秒杀</span>
+							<span class="pictrue_log pictrue_log_class" v-if="item.activity && item.activity.type === '2'">砍价</span>
+							<span class="pictrue_log pictrue_log_class" v-if="item.activity && item.activity.type === '3'">拼团</span>
+							<image :src="item.image" mode=""></image>
                         </view>
                         <view class="text-info">
                             <view class="title line1">{{item.storeName}}</view>
                             <view class="old-price"><text>¥</text>{{item.otPrice}}</view>
                             <view class="price">
                                 <text>￥</text>{{item.price}}
-                                <view class="txt"
-                                      v-if="item.checkCoupon">券</view>
+								<view class="txt" v-if="item.checkCoupon">券</view>
                             </view>
                         </view>
                     </view>
                 </view>
+				<view class='loadingicon acea-row row-center-wrapper' v-if="goodScroll">
+					<text class='loading iconfont icon-jiazai' :hidden='loading==false'></text>
             </view>
+				<view class="mores-txt flex" v-if="!goodScroll">
+					<text>我是有底线的</text>
         </view>
-        <coupon-window :window='window'
-                       :couponList="couponList"
-                       @onColse="onColse"></coupon-window>
-        <authorize @onLoadFun="onLoadFun"
-                   :isAuto="isAuto"
-                   :isShowAuth="isShowAuth"
-                   @authColse="authColse"
-                   :isGoIndex="false"></authorize>
     </view>
+		</view>
+		<!-- 分类页 -->
+		<view class="productList" v-if="navIndex>0" :style="'margin-top:'+prodeuctTop+'px'">
+			<block v-if="sortProduct.length>0">
+				<view class='list acea-row row-between-wrapper' :class='is_switch==true?"":"on"'>
+					<view class='item' :class='is_switch==true?"":"on"' hover-class='none' v-for="(item,index) in sortProduct" :key="index"
+					 @click="godDetail(item)">
+						<view class='pictrue' :class='is_switch==true?"":"on"'>
+							<image :src='item.image' :class='is_switch==true?"":"on"'></image>
+							<span class="pictrue_log_class" :class="is_switch === true ? 'pictrue_log_big' : 'pictrue_log'" v-if="item.activity && item.activity.type === '1'">秒杀</span>
+							<span class="pictrue_log_class" :class="is_switch === true ? 'pictrue_log_big' : 'pictrue_log'" v-if="item.activity && item.activity.type === '2'">砍价</span>
+							<span class="pictrue_log_class" :class="is_switch === true ? 'pictrue_log_big' : 'pictrue_log'" v-if="item.activity && item.activity.type === '3'">拼团</span>
+						</view>
+						<view class='text' :class='is_switch==true?"":"on"'>
+							<view class='name line1'>{{item.store_name}}</view>
+							<view class='money font-color' :class='is_switch==true?"":"on"'>￥<text class='num'>{{item.price}}</text></view>
+							<view class='vip acea-row row-between-wrapper' :class='is_switch==true?"":"on"'>
+								<view class='vip-money' v-if="item.vip_price && item.vip_price > 0">￥{{item.vip_price}}
+									<image src='../../static/images/vip.png'></image>
+								</view>
+								<view>已售{{item.sales}}件</view>
+							</view>
+						</view>
+					</view>
+					<view class='loadingicon acea-row row-center-wrapper' v-if='sortProduct.length > 0'>
+						<text class='loading iconfont icon-jiazai' :hidden='loading==false'></text>{{loadTitle}}
+					</view>
+				</view>
+			</block>
+			<block v-if="sortProduct.length == 0">
+				<view class="noCommodity">
+					<view class='pictrue'>
+						<image src='/static/images/noShopper.png'></image>
+					</view>
+					<recommend :hostProduct="hostProduct"></recommend>
+				</view>
+
+			</block>
+		</view>
+		<coupon-window :window='window' :couponList="couponList" @onColse="onColse"></coupon-window>
+		<!-- #ifdef MP -->
+		<authorize @onLoadFun="onLoadFun" :isAuto="isAuto" :isShowAuth="isShowAuth" @authColse="authColse" :isGoIndex="false"></authorize>
+		<!-- #endif -->
+	</view>
 </template>
 
 <script>
@@ -155,9 +175,15 @@
 	// 	TIPS_KEY
 	// } from '@/config/cache';
 	// #endif
+	// #ifdef H5  
+	import {
+		follow
+	} from '@/api/public.js';
+	// #endif
 	import {
 		getShare 
 	} from '@/api/public.js';
+	import goodList from '@/components/goodList';
 	import promotionGood from '@/components/promotionGood';
 	import couponWindow from '@/components/couponWindow';
 	import ClipboardJS from "@/plugin/clipboard/clipboard.js";
@@ -167,6 +193,7 @@
 	import {
 		mapGetters
 	} from "vuex";
+	import tabNav from '@/components/tabNav.vue'
 	import countDown from '@/components/countDown';
 	import {
 		getCategoryList,
@@ -192,6 +219,8 @@
 	export default {
 		computed: mapGetters(['isLogin', 'uid']),
 		components: {
+			tabNav,
+			goodList,
 			promotionGood,
 			couponWindow,
 			countDown,
@@ -318,11 +347,6 @@
 			})
 		},
 		methods: {
-            jumpTo(path) {
-                uni.navigateTo({
-                    url: path
-                })
-            },
 			// #ifdef MP
 			getTemlIds() {
 				for (var i in arrTemp) {
@@ -345,6 +369,14 @@
 			onColse() {
 				this.$set(this, "window", false);
 			},
+			// 记录会员访问
+			// setVisit() {
+			// 	setVisit({
+			// 		url: '/pages/index/index'
+			// 	}).then(res => {
+			// 		console.log(res)
+			// 	})
+			// },
 			// 获取导航
 			getAllCategory: function() {
 				let that = this;
@@ -490,7 +522,7 @@
 					uni.getSetting({
 						success(res) {
 							if (!res.authSetting['scope.userInfo']) {
-								that.window = that.couponList && that.couponList.length ? true : false;
+								that.window = that.couponList.length ? true : false;
 							} else {
 								that.window = false;
 								that.iShidden = true;
@@ -635,6 +667,14 @@
 					})
 				})
 			},
+			// 直播
+			// getLiveList: function() {
+			// 	getLiveList(1, 20).then(res => {
+			// 		this.liveList = res.data
+			// 	}).catch(res => {
+
+			// 	})
+			// },
 			// 精品推荐
 			getGroomList(onloadH) {
 				this.loading = true
@@ -776,6 +816,7 @@
 			}
 		}
 
+		/* #ifdef MP */
 		.mp-header {
 			width: 100%;
 			position: fixed;
@@ -811,7 +852,10 @@
 			}
 		}
 
+		/* #endif */
+
 		.page_content {
+			/* #ifdef H5 */
 			.swiper {
 				position: relative;
 				width: 100%;
@@ -823,9 +867,8 @@
 				.swiper-item,
 				image {
 					width: 100%;
-					// height: 280rpx;
-					height: 350rpx;
-					// border-radius: 10rpx;
+					height: 305rpx;
+					border-radius: 10rpx;
 				}
 			}
 
@@ -838,28 +881,132 @@
 					flex-direction: column;
 					align-items: center;
 					justify-content: center;
-					width: 25%;
+					width: 20%;
 					margin-top: 30rpx;
-					padding: 5;
+
 					image {
-						width: 150rpx;
-						height: 150rpx;
+						width: 82rpx;
+						height: 82rpx;
 					}
+				}
+			}
+
+			.live-wrapper {
+				position: relative;
+				width: 100%;
+				overflow: hidden;
+				border-radius: 16rpx;
+
+				image {
+					width: 100%;
+					height: 400rpx;
+				}
+
+				.live-top {
+					z-index: 20;
+					position: absolute;
+					left: 0;
+					top: 0;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					color: #fff;
+					width: 180rpx;
+					height: 54rpx;
+					border-radius: 0rpx 0px 18rpx 0px;
+
+					image {
+						width: 30rpx;
+						height: 30rpx;
+						margin-right: 10rpx;
+						/* #ifdef H5 */
+						display: block;
+						/* #endif */
+					}
+				}
+
+				.live-title {
+					position: absolute;
+					left: 0;
+					bottom: 6rpx;
+					width: 100%;
+					height: 70rpx;
+					line-height: 70rpx;
+					text-align: center;
+					font-size: 30rpx;
+					color: #fff;
+					background: rgba(0, 0, 0, .35);
+				}
+
+				&.mores {
+					width: 100%;
+
+					.item {
+						position: relative;
+						width: 320rpx;
+						display: inline-block;
+						border-radius: 16rpx;
+						overflow: hidden;
+						margin-right: 20rpx;
+
+						image {
+							width: 320rpx;
+							height: 180rpx;
+							border-radius: 16rpx;
+						}
+
+						.live-title {
+							height: 40rpx;
+							line-height: 40rpx;
+							text-align: center;
+							font-size: 22rpx;
+						}
+
+						.live-top {
+							width: 120rpx;
+							height: 36rpx;
+							font-size: 22rpx;
+
+					image {
+								width: 20rpx;
+								height: 20rpx;
+							}
+						}
+					}
+				}
+					}
+
+			.hot-img {
+				/* #ifndef H5 */
+				margin-top: 40rpx;
+
+				/* #endif */
+				swiper,
+				swiper-item image {
+					width: 100%;
+					height: 225rpx;
 				}
 			}
 
 			.explosion {
 				width: 100%;
-				padding: 30rpx 20rpx 0rpx;
+				height: 500rpx;
+				margin-top: 20rpx;
+				padding: 30rpx 20rpx;
+				background-image: url('~@/static/images/explosion.png');
+				background-size: 100% 100%;
 				border-radius: 13px;
+
 				.hd {
 					display: flex;
 					align-items: center;
+
 					image {
 						width: 147rpx;
 						height: 35rpx;
 						margin-right: 20rpx;
 					}
+
 					.txt {
 						width: 220rpx;
 						height: 36rpx;
@@ -1072,10 +1219,153 @@
 					}
 				}
 			}
+			.group-wrapper {
+				padding: 26rpx 20rpx;
+				margin-top: 20rpx;
+				background: #fff;
+				border-radius: 24rpx;
+
+				.hd {
+					display: flex;
+					align-items: center;
+					justify-content: space-between;
+
+					.left {
+						display: flex;
+						align-items: center;
+
+						.icon {
+							width: 38rpx;
+							height: 38rpx;
+							margin-right: 8rpx;
+						}
+
+						.title {
+							width: 134rpx;
+							height: 33rpx;
+						}
+
+						.person {
+							display: flex;
+							align-items: center;
+							margin-left: 40rpx;
+
+							.avatar-box {
+								display: flex;
+								align-items: center;
+
+								image {
+									width: 30rpx;
+									height: 30rpx;
+									border-radius: 50%;
+									margin-right: -10rpx;
+								}
+							}
+
+							.num {
+								margin-left: 18rpx;
+								font-size: 26rpx;
+								color: #999999;
+							}
+						}
+					}
+
+					.more {
+						font-size: 26rpx;
+						color: #999;
+
+						.iconfont {
+							margin-left: 6rpx;
+							font-size: 25rpx;
+						}
+					}
+				}
+
+				.group-scroll {
+					width: 100%;
+					margin-top: 25rpx;
+
+					.group-item {
+						display: inline-block;
+						width: 222rpx;
+						margin-right: 20rpx;
+						box-shadow: 0px 2px 6px 2px rgba(0, 0, 0, 0.03);
+						border-radius: 16rpx;
+
+						image {
+							width: 100%;
+							height: 222rpx;
+							border-radius: 16rpx 16rpx 0 0;
+						}
+
+						.info {
+							padding: 8rpx 13rpx;
+
+							.name {
+								font-size: 24rpx;
+							}
+
+							.price-box {
+								display: flex;
+								align-items: center;
+								margin-top: 10rpx;
+
+								.tips {
+									display: flex;
+									align-items: center;
+									justify-content: center;
+									width: 76rpx;
+									height: 30rpx;
+									margin-right: 6rpx;
+									background: linear-gradient(90deg, rgba(255, 0, 0, .1) 0%, rgba(255, 84, 0, .1) 100%);
+									border-radius: 2px;
+									font-size: 20rpx;
+									color: $theme-color;
+								}
+
+								.price {
+									font-size: 26rpx;
+									color: $theme-color;
+									font-weight: 700;
+
+									text {
+										font-size: 20rpx;
+									}
+								}
+							}
+
+						}
+
+						.bom-btn {
+							display: flex;
+							align-items: center;
+							justify-content: center;
+							width: 100%;
+							height: 48rpx;
+							background: linear-gradient(90deg, $bg-star 0%, $bg-end 100%);
+							border-radius: 0px 0px 16rpx 16rpx;
+							color: #fff;
+
+						}
+					}
+				}
+			}
+
+			.boutique {
+				margin-top: 20rpx;
+
+				swiper,
+				swiper-item,
+				.slide-image {
+					width: 100%;
+					height: 240rpx;
+					border-radius: 12rpx;
+				}
+			}
 
 			.index-product-wrapper {
 				margin-top: 40rpx;
-				padding: 0 20rpx;
+
 				&.on {
 					min-height: 1500rpx;
 				}

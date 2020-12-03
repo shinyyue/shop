@@ -226,7 +226,7 @@
             // },
             concat() {
                 uni.makePhoneCall({
-					phoneNumber: '000000'
+					phoneNumber: '076928826746'
 				})
             },
 			getOrderData(){
