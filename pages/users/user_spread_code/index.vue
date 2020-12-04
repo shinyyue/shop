@@ -34,9 +34,6 @@
         <view class="canvas">
             <canvas style="width:750px;height:1190px;"
                     canvas-id="canvasOne"></canvas>
-            <canvas style=""
-                    canvas-id="qrcode"
-                    :style="{width: `${qrcodeSize}px`, height: `${qrcodeSize}px`}" />
         </view>
     </view>
 </template>
@@ -62,6 +59,7 @@
 	import {
 		imageBase64
 	} from "@/api/public";
+	import base64src from '@/utils/base64ToPath';
 	export default {
 		components: {
 			authorize,
@@ -84,7 +82,8 @@
 				qrcodeSize: 1000,
 				PromotionCode: '',
                 base64List: [],
-                uQRCode: '',
+				uQRCode: '',
+				picture: ''
 			};
 		},
 		computed: mapGetters(['isLogin']),
@@ -122,56 +121,36 @@
 					this.PosterCanvas(this.spreadList[0].pic, res.data.code, this.userInfo.nickname,0);
 				})
             },
-			// 生成二维码；
-			// make() {
-			// 	let that = this;
-			// 	let href = location.href.split('/pages')[0];
-			// 	uQRCode.make({
-			// 		canvasId: 'qrcode',
-			// 		text: href+'/pages/index/index?spread=' + that.userInfo.uid,
-			// 		size: this.qrcodeSize,
-			// 		margin: 10,
-			// 		success: res => {
-			// 			that.PromotionCode = res;
-			// 			// let image = '../../../static/images/aa.jpg';
-			// 			// that.PosterCanvas(image, that.PromotionCode, that.userInfo.nickname,0);
-			// 			that.PosterCanvas(this.base64List[0], that.PromotionCode, that.userInfo.nickname,0);
-			// 		},
-			// 		complete: () => {},
-			// 		fail: res => {
-			// 			that.$util.Tips({
-			// 				title: '海报二维码生成失败！'
-			// 			});
-			// 		}
-			// 	})
-			// },
 			PosterCanvas(arrImages, code, nickname,index) {
                 let that = this;
 				let context = uni.createCanvasContext('canvasOne')
 				context.clearRect(0, 0, 0, 0);
 				uni.getImageInfo({
 					src: arrImages,
-					success: (image) => {
-                        context.drawImage(arrImages, 0, 0, 750, 1190);
-                        context.save();
-                        context.drawImage(code, 110, 925, 200, 200);
-                        // context.drawImage(arrImages, 0, 0, 750, 1190);
-						context.restore();
-                        
-						context.setFontSize(28);
-						context.fillText(nickname, 340, 980);
-						context.fillText('邀请您加入', 340, 1020);
-						context.draw(true,() => {
-							uni.canvasToTempFilePath({
-							  destWidth: 750,
-							  destHeight: 1190,
-							  canvasId: 'canvasOne',
-							  fileType: 'jpg',
-							  success: (res) => {
-								uni.hideLoading();
-                                that.spreadList[index].pic = res.tempFilePath;
-							  } 
-							})
+					success: (res) => {
+						base64src(code).then(codePath => {
+							context.drawImage(res.path, 0, 0, 750, 1190);
+							context.save();
+							context.drawImage(codePath, 110, 925, 200, 200);
+
+							context.setFontSize(28);
+							context.fillText(nickname, 340, 980);
+							context.fillText('邀请您加入', 340, 1020);
+
+							setTimeout(() => {
+								context.draw(true,() => {
+									uni.canvasToTempFilePath({
+										destWidth: 750,
+										destHeight: 1190,
+										canvasId: 'canvasOne',
+										fileType: 'jpg',
+										success: (res) => {
+											uni.hideLoading();
+											that.spreadList[index].pic = res.tempFilePath;
+										} 
+									})
+								})
+							}, 500)
 						})
 					},
 					fail: (err) => {
