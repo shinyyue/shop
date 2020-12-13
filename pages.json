@@ -221,6 +221,12 @@
                 "style": {
                     "navigationBarTitleText": "申请退货"
                 }
+            },
+            {
+                "path": "goods_comment_list/index",
+                "style": {
+                    "navigationBarTitleText": "商品评分"
+                }
             }
         ]
     }],

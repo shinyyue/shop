@@ -21,22 +21,22 @@
 						<view class='share acea-row row-between row-bottom'>
 							<view class='money font-color'>
 								￥
-								<text class='num'>{{storeInfo.price}}</text>
-								<text class='vip-money' v-if="storeInfo.vipPrice && storeInfo.vipPrice > 0">￥{{storeInfo.vipPrice}}</text>
+								<text class='num'>{{storeInfo.price || 0}}</text>
+								<text class='vip-money' v-if="storeInfo.vipPrice && storeInfo.vipPrice > 0">￥{{storeInfo.vipPrice||0}}</text>
 								<image v-if="storeInfo.vipPrice && storeInfo.vipPrice > 0" src="../../static/images/vip.png"></image>
 							</view>
 							<view class='iconfont icon-fenxiang' @click="listenerActionSheet"></view>
 						</view>
-						<view class='introduce'>{{storeInfo.storeName}}</view>
+						<view class='introduce'>{{storeInfo.storeName||''}}</view>
 						<view class='label acea-row row-between-wrapper'>
-							<view>原价:￥{{storeInfo.otPrice}}</view>
-							<view>库存:{{storeInfo.stock}}{{storeInfo.unitName}}</view>
-							<view>销量:{{storeInfo.sales}}{{storeInfo.unitName}}</view>
+							<!-- <view>原价:￥{{storeInfo.otPrice}}</view> -->
+							<view>库存:{{storeInfo.stock||0}}{{storeInfo.unitName||''}}</view>
+							<view>销量:{{Number(storeInfo.sales)+Number(storeInfo.ficti)||0}}{{storeInfo.unitName||''}}</view>
 						</view>
 						<view class='coupon acea-row row-between-wrapper' @click='couponTap' style="margin-top: 20rpx;">
 							<view class='hide line1 acea-row'>
 								优惠券：
-								<view class='activity' v-for="(item,index) in couponList" :key="index">满{{item.minPrice}}减{{item.money}}</view>
+								<view class='activity' v-for="(item,index) in couponList" :key="index">满{{item.minPrice||0}}减{{item.money||0}}</view>
 							</view>
 							<view class='iconfont icon-jiantou'></view>
 						</view>
@@ -69,9 +69,9 @@
 				</view>
 				<view class='userEvaluation' id="past1">
 					<view class='title acea-row row-between-wrapper'>
-						<view>用户评价({{replyCount}})</view>
+						<view>用户评价({{replyCount || 0}})</view>
 						<navigator class='praise' hover-class='none' :url='"/pages/users/goods_comment_list/index?product_id="+id'>
-							<text class='font-color'>{{replyChance}}%</text>好评率
+							<text class='font-color'>{{replyChance || 0}}%</text>好评率
 							<text class='iconfont icon-jiantou'></text>
 						</navigator>
 					</view>
@@ -692,8 +692,8 @@
 					// }
 					query.select(idView).boundingClientRect();
 					query.exec(function(res) {
-						var top = res[0].top;
-						var height = res[0].height;
+						var top = res && res[0] && res[0].top || 0;
+						var height = res && res[0] && res[0].height || 0;
 						topArr.push(top);
 						heightArr.push(height);
 						that.$set(that, 'topArr', topArr);

@@ -1,5 +1,6 @@
 <template>
-	<view class="page-index" :class="{'bgf':navIndex >0}">
+    <view class="page-index"
+          :class="{'bgf':navIndex >0}">
         <view class="mp-header">
             <view class="sys-head"
                   :style="{ height: statusBarHeight }"></view>
@@ -14,7 +15,9 @@
             </view>
         </view>
         <!-- 首页展示 -->
-		<view class="page_content" :style="'margin-top:'+marTop+'px;'" v-if="navIndex == 0">
+        <view class="page_content"
+              :style="'margin-top:'+marTop+'px;'"
+              v-if="navIndex == 0">
             <!-- banner -->
             <view class="swiper"
                   v-if="imgUrls.length">
@@ -40,120 +43,190 @@
                 </swiper>
             </view>
             <!-- menu -->
-			<view class='nav acea-row' v-if="menus.length">
-				<block v-for="(item,index) in menus" :key="index">
-					<navigator class='item' v-if="item.show == '1'" :url='item.url' open-type='switchTab' hover-class='none'>
-						<view class='pictrue'>
-							<image :src='item.pic'></image>
-						</view>
-						<view class="menu-txt">{{item.name}}</view>
-					</navigator>
-					<navigator class='item' v-else :url='item.url' hover-class='none'>
-						<view class='pictrue'>
-							<image :src='item.pic'></image>
-						</view>
-						<view class="menu-txt">{{item.name}}</view>
-					</navigator>
+            <view class='nav acea-row'
+                  v-if="menus.length">
+                <block v-for="(item,index) in menus"
+                       :key="index">
+                    <navigator class='item'
+                               v-if="item.show == '1'"
+                               :url='item.url'
+                               open-type='switchTab'
+                               hover-class='none'>
+                        <view class='pictrue'>
+                            <image :src='item.pic'></image>
+                        </view>
+                        <view class="menu-txt">{{item.name}}</view>
+                    </navigator>
+                    <navigator class='item'
+                               v-else
+                               :url='item.url'
+                               hover-class='none'>
+                        <view class='pictrue'>
+                            <image :src='item.pic'></image>
+                        </view>
+                        <view class="menu-txt">{{item.name}}</view>
+                    </navigator>
                 </block>
             </view>
             <!-- 超值爆款 -->
-            <view class="explosion">
+            <!-- <view class="explosion">
                 <view class="hd">
-					<image src="/static/images/explosion-title.png" mode=""></image>
+                    <image src="/static/images/explosion-title.png"
+                           mode=""></image>
                     <view class="txt">美好生活由此开始</view>
                 </view>
-				<view class="bd">
-					<navigator class="item" v-for="(item,index) in explosiveMoney" :key="index" :url="'/pages/columnGoods/HotNewGoods/index?type='+item.type"
-					 hover-class='none'>
-						<view class="con-box">
-							<view class="title line1">{{item.title}}</view>
-							<view class="con line2">{{item.info}}</view>
-							<view class="go">GO！<image src="/static/images/right-icon.png" mode=""></image>
+                <view class="bd">
+                    <navigator class="item"
+                               v-for="(item,index) in explosiveMoney"
+                               :key="index"
+                               :url="'/pages/columnGoods/HotNewGoods/index?type='+item.type"
+                               hover-class='none'>
+                        <view class="con-box">
+                            <view class="title line1">{{item.title}}</view>
+                            <view class="con line2">{{item.info}}</view>
+                            <view class="go">GO！<image src="/static/images/right-icon.png"
+                                       mode=""></image>
+                            </view>
+                        </view>
+                        <image :src="item.image"></image>
+                    </navigator>
+                </view>
+            </view> -->
+            <!-- 精品推荐 -->
+            <view class='boutique'>
+                <block v-for="(item,index) in bastBanner"
+                       :key="index">
+                    <!-- <navigator :url='item.url'
+                               hover-class='none'> -->
+                        <image :src="item.pic"
+                               class="slide-image"
+                               mode="widthFix" />
+                    <!-- </navigator> -->
+                </block>
             </view>
-						</view>
-						<image :src="item.image"></image>
-					</navigator>
-				</view>
-			</view>
-			<!-- 首页推荐 -->
-			<view class="index-product-wrapper" :class="iSshowH?'on':''">
-				<view class="nav-bd">
-					<view class="item" v-for="(item,index) in explosiveMoney" :key="index" :index="item.id" :class="{active:index == ProductNavindex}"
-					 @click="ProductNavTab(item,index)">
-						<view class="txt">{{item.title}}</view>
-						<view class="label">{{item.info}}</view>
-					</view>
-				</view>
-				<!-- 首发新品 -->
-				<view class="list-box animated" :class='tempArr.length > 0?"fadeIn on":""'>
-					<view class="item" v-for="(item,index) in tempArr" :key="index" @click="goDetail(item)">
+            <!-- 首页推荐 -->
+            <view class="index-product-wrapper"
+                  :class="iSshowH?'on':''">
+                <view class="nav-bd">
+                    <view class="item"
+                          v-for="(item,index) in explosiveMoney"
+                          :key="index"
+                          :index="item.id"
+                          :class="{active:index == ProductNavindex}"
+                          @click="ProductNavTab(item,index)">
+                        <view class="txt">{{item.title}}</view>
+                        <!-- <view class="label">{{item.info}}</view> -->
+                    </view>
+                </view>
+                <!-- 首发新品 -->
+                <view class="list-box animated"
+                      :class='tempArr.length > 0?"fadeIn on":""'>
+                    <view class="item"
+                          v-for="(item,index) in tempArr"
+                          :key="index"
+                          @click="goDetail(item)">
                         <view class="pictrue">
-							<span class="pictrue_log pictrue_log_class" v-if="item.activity && item.activity.type === '1'">秒杀</span>
-							<span class="pictrue_log pictrue_log_class" v-if="item.activity && item.activity.type === '2'">砍价</span>
-							<span class="pictrue_log pictrue_log_class" v-if="item.activity && item.activity.type === '3'">拼团</span>
-							<image :src="item.image" mode=""></image>
+                            <span class="pictrue_log pictrue_log_class"
+                                  v-if="item.activity && item.activity.type === '1'">秒杀</span>
+                            <span class="pictrue_log pictrue_log_class"
+                                  v-if="item.activity && item.activity.type === '2'">砍价</span>
+                            <span class="pictrue_log pictrue_log_class"
+                                  v-if="item.activity && item.activity.type === '3'">拼团</span>
+                            <image :src="item.image"
+                                   mode=""></image>
                         </view>
                         <view class="text-info">
                             <view class="title line1">{{item.storeName}}</view>
-                            <view class="old-price"><text>¥</text>{{item.otPrice}}</view>
+                            <!-- <view class="old-price"><text>¥</text>{{item.otPrice}}</view> -->
                             <view class="price">
                                 <text>￥</text>{{item.price}}
-								<view class="txt" v-if="item.checkCoupon">券</view>
+                                <view class="txt"
+                                      v-if="item.checkCoupon">券</view>
                             </view>
                         </view>
                     </view>
                 </view>
-				<view class='loadingicon acea-row row-center-wrapper' v-if="goodScroll">
-					<text class='loading iconfont icon-jiazai' :hidden='loading==false'></text>
+                <view class='loadingicon acea-row row-center-wrapper'
+                      v-if="goodScroll">
+                    <text class='loading iconfont icon-jiazai'
+                          :hidden='loading==false'></text>
+                </view>
+                <view class="mores-txt flex"
+                      v-if="!goodScroll">
+                    <text>我是有底线的</text>
+                </view>
             </view>
-				<view class="mores-txt flex" v-if="!goodScroll">
-					<text>我是有底线的</text>
         </view>
-    </view>
-		</view>
-		<!-- 分类页 -->
-		<view class="productList" v-if="navIndex>0" :style="'margin-top:'+prodeuctTop+'px'">
-			<block v-if="sortProduct.length>0">
-				<view class='list acea-row row-between-wrapper' :class='is_switch==true?"":"on"'>
-					<view class='item' :class='is_switch==true?"":"on"' hover-class='none' v-for="(item,index) in sortProduct" :key="index"
-					 @click="godDetail(item)">
-						<view class='pictrue' :class='is_switch==true?"":"on"'>
-							<image :src='item.image' :class='is_switch==true?"":"on"'></image>
-							<span class="pictrue_log_class" :class="is_switch === true ? 'pictrue_log_big' : 'pictrue_log'" v-if="item.activity && item.activity.type === '1'">秒杀</span>
-							<span class="pictrue_log_class" :class="is_switch === true ? 'pictrue_log_big' : 'pictrue_log'" v-if="item.activity && item.activity.type === '2'">砍价</span>
-							<span class="pictrue_log_class" :class="is_switch === true ? 'pictrue_log_big' : 'pictrue_log'" v-if="item.activity && item.activity.type === '3'">拼团</span>
-						</view>
-						<view class='text' :class='is_switch==true?"":"on"'>
-							<view class='name line1'>{{item.store_name}}</view>
-							<view class='money font-color' :class='is_switch==true?"":"on"'>￥<text class='num'>{{item.price}}</text></view>
-							<view class='vip acea-row row-between-wrapper' :class='is_switch==true?"":"on"'>
-								<view class='vip-money' v-if="item.vip_price && item.vip_price > 0">￥{{item.vip_price}}
-									<image src='../../static/images/vip.png'></image>
-								</view>
-								<view>已售{{item.sales}}件</view>
-							</view>
-						</view>
-					</view>
-					<view class='loadingicon acea-row row-center-wrapper' v-if='sortProduct.length > 0'>
-						<text class='loading iconfont icon-jiazai' :hidden='loading==false'></text>{{loadTitle}}
-					</view>
-				</view>
-			</block>
-			<block v-if="sortProduct.length == 0">
-				<view class="noCommodity">
-					<view class='pictrue'>
-						<image src='/static/images/noShopper.png'></image>
-					</view>
-					<recommend :hostProduct="hostProduct"></recommend>
-				</view>
+        <!-- 分类页 -->
+        <view class="productList"
+              v-if="navIndex>0"
+              :style="'margin-top:'+prodeuctTop+'px'">
+            <block v-if="sortProduct.length>0">
+                <view class='list acea-row row-between-wrapper'
+                      :class='is_switch==true?"":"on"'>
+                    <view class='item'
+                          :class='is_switch==true?"":"on"'
+                          hover-class='none'
+                          v-for="(item,index) in sortProduct"
+                          :key="index"
+                          @click="godDetail(item)">
+                        <view class='pictrue'
+                              :class='is_switch==true?"":"on"'>
+                            <image :src='item.image'
+                                   :class='is_switch==true?"":"on"'></image>
+                            <span class="pictrue_log_class"
+                                  :class="is_switch === true ? 'pictrue_log_big' : 'pictrue_log'"
+                                  v-if="item.activity && item.activity.type === '1'">秒杀</span>
+                            <span class="pictrue_log_class"
+                                  :class="is_switch === true ? 'pictrue_log_big' : 'pictrue_log'"
+                                  v-if="item.activity && item.activity.type === '2'">砍价</span>
+                            <span class="pictrue_log_class"
+                                  :class="is_switch === true ? 'pictrue_log_big' : 'pictrue_log'"
+                                  v-if="item.activity && item.activity.type === '3'">拼团</span>
+                        </view>
+                        <view class='text'
+                              :class='is_switch==true?"":"on"'>
+                            <view class='name line1'>{{item.store_name}}</view>
+                            <view class='money font-color'
+                                  :class='is_switch==true?"":"on"'>￥<text class='num'>{{item.price}}</text></view>
+                            <view class='vip acea-row row-between-wrapper'
+                                  :class='is_switch==true?"":"on"'>
+                                <view class='vip-money'
+                                      v-if="item.vip_price && item.vip_price > 0">￥{{item.vip_price}}
+                                    <image src='../../static/images/vip.png'></image>
+                                </view>
+                                <view>已售{{item.sales}}件</view>
+                            </view>
+                        </view>
+                    </view>
+                    <view class='loadingicon acea-row row-center-wrapper'
+                          v-if='sortProduct.length > 0'>
+                        <text class='loading iconfont icon-jiazai'
+                              :hidden='loading==false'></text>{{loadTitle}}
+                    </view>
+                </view>
+            </block>
+            <block v-if="sortProduct.length == 0">
+                <view class="noCommodity">
+                    <view class='pictrue'>
+                        <image src='/static/images/noShopper.png'></image>
+                    </view>
+                    <recommend :hostProduct="hostProduct"></recommend>
+                </view>
 
-			</block>
-		</view>
-		<coupon-window :window='window' :couponList="couponList" @onColse="onColse"></coupon-window>
-		<!-- #ifdef MP -->
-		<authorize @onLoadFun="onLoadFun" :isAuto="isAuto" :isShowAuth="isShowAuth" @authColse="authColse" :isGoIndex="false"></authorize>
-		<!-- #endif -->
-	</view>
+            </block>
+        </view>
+        <coupon-window :window='window'
+                       :couponList="couponList"
+                       @onColse="onColse"></coupon-window>
+        <!-- #ifdef MP -->
+        <authorize @onLoadFun="onLoadFun"
+                   :isAuto="isAuto"
+                   :isShowAuth="isShowAuth"
+                   @authColse="authColse"
+                   :isGoIndex="false"></authorize>
+        <!-- #endif -->
+    </view>
 </template>
 
 <script>
@@ -505,7 +578,7 @@
 					
 					this.getGroomList();
 					
-					this.shareApi();
+					// this.shareApi();
 					
 					this.getcouponList();
 				})
@@ -543,14 +616,14 @@
 					});
 				});
 			},
-			shareApi: function() {
-				getShare().then(res => {
-					this.$set(this, 'configApi', res.data);
-					// #ifdef H5
-					this.setOpenShare(res.data);
-					// #endif
-				})
-			},
+			// shareApi: function() {
+			// 	getShare().then(res => {
+			// 		this.$set(this, 'configApi', res.data);
+			// 		// #ifdef H5
+			// 		this.setOpenShare(res.data);
+			// 		// #endif
+			// 	})
+			// },
 			getChatUrL() {
 				getWechatConfig().then(res => {
 					let data = res.data;
@@ -600,18 +673,18 @@
 			// 		});
 			// },
 			// 微信分享；
-			setOpenShare: function(data) {
-				let that = this;
-				if (that.$wechat.isWeixin()) {
-					let configAppMessage = {
-						desc: data.synopsis,
-						title: data.title,
-						link: location.href,
-						imgUrl: data.img
-					};
-					that.$wechat.wechatEvevt(["updateAppMessageShareData", "updateTimelineShareData"], configAppMessage);
-				}
-			},
+			// setOpenShare: function(data) {
+			// 	let that = this;
+			// 	if (that.$wechat.isWeixin()) {
+			// 		let configAppMessage = {
+			// 			desc: data.synopsis,
+			// 			title: data.title,
+			// 			link: location.href,
+			// 			imgUrl: data.img
+			// 		};
+			// 		that.$wechat.wechatEvevt(["updateAppMessageShareData", "updateTimelineShareData"], configAppMessage);
+			// 	}
+			// },
 			// 授权关闭
 			authColse: function(e) {
 				this.isShowAuth = e
@@ -1353,12 +1426,13 @@
 
 			.boutique {
 				margin-top: 20rpx;
-
-				swiper,
-				swiper-item,
+                flex-direction: column;
+                justify-content: flex-start;
+                align-items: center;
 				.slide-image {
+                    box-sizing: border-box;
 					width: 100%;
-					height: 305rpx;
+                    padding: 0 20rpx;
 					border-radius: 12rpx;
 				}
 			}
@@ -1384,6 +1458,8 @@
 						.txt {
 							font-size: 32rpx;
 							color: #282828;
+                            padding-bottom: 6rpx;
+                            border-bottom: 4rpx solid transparent;
 						}
 
 						.label {
@@ -1399,7 +1475,11 @@
 
 						&.active {
 							color: $theme-color;
-
+                            // border-bottom: 2rpx solid linear-gradient(90deg, $bg-star 0%, $bg-end 100%);
+                            .txt {
+                                padding-bottom: 6rpx;
+                                border-bottom: 4rpx solid red;
+                            }
 							.label {
 								background: linear-gradient(90deg, $bg-star 0%, $bg-end 100%);
 								border-radius: 16rpx;
@@ -1408,15 +1488,16 @@
 						}
 					}
 				}
-
 				.list-box {
 					display: flex;
 					flex-wrap: wrap;
 					justify-content: space-between;
 					margin-top: 30rpx;
+                    padding: 0 20rpx;
 
 					.item {
 						width: 345rpx;
+                        // flex: 1;
 						margin-bottom: 20rpx;
 						background-color: #fff;
 						border-radius: 10px;
