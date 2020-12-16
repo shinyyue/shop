@@ -15,23 +15,19 @@
                         <image :src="item.pic"
                                class="slide-image"
                                :class="swiperIndex == index ? 'active' : 'quiet'"
-                               mode='aspectFill' />
+                               mode="aspectFill" />
                     </swiper-item>
                 </block>
             </swiper>
             <view class='keep bg-color'
                   @click='savePosterPath'>保存海报</view>
-            <div class="preserve acea-row row-center-wrapper">
-                <div class="line"></div>
-                <div class="tip">长按保存图片</div>
-                <div class="line"></div>
-            </div>
         </view>
         <authorize @onLoadFun="onLoadFun"
                    :isAuto="isAuto"
                    :isShowAuth="isShowAuth"
                    @authColse="authColse"></authorize>
-        <view class="canvas">
+        <view class="canvas"
+              v-show="showCanvas">
             <canvas style="width:750px;height:1190px;"
                     canvas-id="canvasOne"></canvas>
         </view>
@@ -83,7 +79,8 @@
 				PromotionCode: '',
                 base64List: [],
 				uQRCode: '',
-				picture: ''
+                picture: '',
+                showCanvas: true
 			};
 		},
 		computed: mapGetters(['isLogin']),
@@ -145,7 +142,8 @@
 										canvasId: 'canvasOne',
 										fileType: 'jpg',
 										success: (res) => {
-											uni.hideLoading();
+                                            uni.hideLoading();
+                                            that.$set(that, 'showCanvas', false)
 											that.spreadList[index].pic = res.tempFilePath;
 										} 
 									})
@@ -154,10 +152,10 @@
 						})
 					},
 					fail: (err) => {
-						uni.hideLoading();
+                        uni.hideLoading();
 						this.$util.Tips({
-							title: '无法获取图片信息'
-						});
+							title: JSON.stringify(err) || '无法获取图片信息'
+                        });
 					}
 				});
 			},
@@ -172,89 +170,79 @@
 			bindchange(e) {
 				let index = e.detail.current;
 				this.swiperIndex = index;
-				this.PosterCanvas(this.spreadList[index].pic, this.PromotionCode, this.userInfo.nickname,index);
-			},
+                this.PosterCanvas(this.spreadList[index].pic, this.PromotionCode, this.userInfo.nickname,index);
+                this.$set(this, 'showCanvas', true)
+                let context = uni.createCanvasContext('canvasOne')
+                context.clearRect(0, 0, 0, 0);
+                context.draw();
+            },
 			// 点击保存海报
 			savePosterPath() {
-				let that = this;
-				uni.downloadFile({
-					url: this.spreadList[this.swiperIndex].pic,
-					success(resFile) {
-						if (resFile.statusCode === 200) {
-							uni.getSetting({
-								success(res) {
-									if (!res.authSetting['scope.writePhotosAlbum']) {
-										uni.authorize({
-											scope: 'scope.writePhotosAlbum',
-											success() {
-												uni.saveImageToPhotosAlbum({
-													filePath: resFile.tempFilePath,
-													success: function(res) {
-														return that.$util.Tips({
-															title: '保存成功'
-														});
-													},
-													fail: function(res) {
-														return that.$util.Tips({
-															title: res.errMsg
-														});
-													},
-													complete: function(res) {},
-												})
-											},
-											fail() {
-												uni.showModal({
-													title: '您已拒绝获取相册权限',
-													content: '是否进入权限管理，调整授权？',
-													success(res) {
-														if (res.confirm) {
-															uni.openSetting({
-																success: function(res) {
-																	console.log(res.authSetting)
-																}
-															});
-														} else if (res.cancel) {
-															return that.$util.Tips({
-																title: '已取消！'
-															});
-														}
-													}
-												})
-											}
-										})
-									} else {
-										uni.saveImageToPhotosAlbum({
-											filePath: resFile.tempFilePath,
-											success: function(res) {
-												return that.$util.Tips({
-													title: '保存成功'
-												});
-											},
-											fail: function(res) {
-												return that.$util.Tips({
-													title: res.errMsg
-												});
-											},
-											complete: function(res) {},
-										})
-									}
-								},
-								fail(res) {
-
-								}
-							})
-						} else {
-							return that.$util.Tips({
-								title: resFile.errMsg
-							});
-						}
-					},
-					fail(res) {
-						return that.$util.Tips({
-							title: res.errMsg
-						});
-					}
-				})
+                let that = this;
+                const path = this.spreadList[this.swiperIndex].pic;
+                uni.getSetting({
+                    success(res) {
+                        if (!res.authSetting['scope.writePhotosAlbum']) {
+                            uni.authorize({
+                                scope: 'scope.writePhotosAlbum',
+                                success() {
+                                    uni.saveImageToPhotosAlbum({
+                                        filePath: path,
+                                        success: function(res) {
+                                            return that.$util.Tips({
+                                                title: '保存成功'
+                                            });
+                                        },
+                                        fail: function(res) {
+                                            return that.$util.Tips({
+                                                title: res.errMsg
+                                            });
+                                        },
+                                        complete: function(res) {
+                                            console.log(11111, res)
+                                        },
+                                    })
+                                },
+                                fail() {
+                                    uni.showModal({
+                                        title: '您已拒绝获取相册权限',
+                                        content: '是否进入权限管理，调整授权？',
+                                        success(res) {
+                                            if (res.confirm) {
+                                                uni.openSetting({
+                                                    success: function(res) {
+                                                        console.log(res.authSetting)
+                                                    }
+                                                });
+                                            } else if (res.cancel) {
+                                                return that.$util.Tips({
+                                                    title: '已取消！'
+                                                });
+                                            }
+                                        }
+                                    })
+                                }
+                            })
+                        } else {
+                            uni.saveImageToPhotosAlbum({
+                                filePath: path,
+                                success: function(res) {
+                                    return that.$util.Tips({
+                                        title: '保存成功'
+                                    });
+                                },
+                                fail: function(res) {
+                                    return that.$util.Tips({
+                                        title: res.errMsg
+                                    });
+                                }
+                            })
+                        }
+                    },
+                    fail(err) {
+                        console.log('getSetting---', err)
+                    }
+                })
 			},
 			userInfos() {
 				getUserInfo().then(res => {
@@ -299,8 +287,10 @@
 	}
 	.canvas canvas{
 		position: fixed;
-		z-index: -5rpx;
-		opacity: 0;
+        top: 0;
+        left: 0;
+        opacity: 0;
+		z-index: -5;
 	}
 	.distribution-posters swiper {
 		width: 100%;
