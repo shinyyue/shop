@@ -1,121 +1,176 @@
 <template>
-	<view>
-		<view class='shoppingCart copy-data'>
-			<view class='labelNav acea-row row-around row-middle'>
-				<view class='item'><text class='iconfont icon-xuanzhong'></text>100%正品保证</view>
-				<view class='item'><text class='iconfont icon-xuanzhong'></text>所有商品精挑细选</view>
-				<view class='item'><text class='iconfont icon-xuanzhong'></text>售后无忧</view>
-			</view>
-			<view class='nav acea-row row-between-wrapper'>
-				<view>购物数量 <text class='num font-color'>{{cartCount}}</text></view>
-				<view v-if="cartList.valid.length > 0 || cartList.invalid.length > 0" class='administrate acea-row row-center-wrapper'
-				 @click='manage'>{{ footerswitch ? '管理' : '取消'}}</view>
-			</view>
-			<view v-if="cartList.valid.length > 0 || cartList.invalid.length > 0">
-				<view class='list'>
-					<checkbox-group @change="checkboxChange">
-						<block v-for="(item,index) in cartList.valid" :key="index">
-							<view class='item acea-row row-between-wrapper'>
-								<!-- #ifndef MP -->
-								<checkbox :value="(item.id).toString()" :checked="item.checked" :disabled="item.attrStatus?false:true" />
-								<!-- #endif -->
-								<!-- #ifdef MP -->
-								<checkbox :value="item.id" :checked="item.checked" :disabled="item.attrStatus?false:true" />
-								<!-- #endif -->
-								<navigator :url='"/pages/goods_details/index?id="+item.productId' hover-class='none' class='picTxt acea-row row-between-wrapper'>
-									<view class='pictrue'>
-										<image v-if="item.productInfo.attrInfo" :src='item.productInfo.attrInfo.image'></image>
-										<image v-else :src='item.productInfo.image'></image>
-									</view>
-									<view class='text'>
-										<view class='line1' :class="item.attrStatus?'':'reColor'">{{item.productInfo.storeName}}</view>
-										<view class='infor line1' v-if="item.productInfo.attrInfo">属性：{{item.productInfo.attrInfo.suk}}</view>
-										<view class='money' v-if="item.attrStatus">￥{{item.truePrice}}</view>
-										<view class="reElection acea-row row-between-wrapper" v-else>
-											<view class="title">请重新选择商品规格</view>
-											<view class="reBnt cart-color acea-row row-center-wrapper" @click.stop="reElection(item)">重选</view>
-										</view>
-									</view>
-									<view class='carnum acea-row row-center-wrapper' v-if="item.attrStatus">
-										<view class="reduce" :class="item.numSub ? 'on' : ''" @click.stop='subCart(index)'>-</view>
-										<view class='num'>{{item.cartNum}}</view>
-										<!-- <view class="num">
+    <view>
+        <view class='shoppingCart copy-data'>
+            <view class='labelNav acea-row row-around row-middle'>
+                <view class='item'><text class='iconfont icon-xuanzhong'></text>100%正品保证</view>
+                <view class='item'><text class='iconfont icon-xuanzhong'></text>所有商品精挑细选</view>
+                <view class='item'><text class='iconfont icon-xuanzhong'></text>售后无忧</view>
+            </view>
+            <view class='nav acea-row row-between-wrapper'>
+                <view>购物数量 <text class='num font-color'>{{cartCount}}</text></view>
+                <view v-if="cartList.valid.length > 0 || cartList.invalid.length > 0"
+                      class='administrate acea-row row-center-wrapper'
+                      @click='manage'>{{ footerswitch ? '管理' : '取消'}}</view>
+            </view>
+            <view v-if="cartList.valid.length > 0 || cartList.invalid.length > 0">
+                <view class='list'>
+                    <checkbox-group @change="checkboxChange">
+                        <block v-for="(item,index) in cartList.valid"
+                               :key="index">
+                            <view class='item acea-row row-between-wrapper'>
+                                <!-- #ifndef MP -->
+                                <checkbox :value="(item.id).toString()"
+                                          :checked="item.checked"
+                                          :disabled="item.attrStatus?false:true" />
+                                <!-- #endif -->
+                                <!-- #ifdef MP -->
+                                <checkbox :value="item.id"
+                                          :checked="item.checked"
+                                          :disabled="item.attrStatus?false:true" />
+                                <!-- #endif -->
+                                <navigator :url='"/pages/goods_details/index?id="+item.productId'
+                                           hover-class='none'
+                                           class='picTxt acea-row row-between-wrapper'>
+                                    <view class='pictrue'>
+                                        <image v-if="item.productInfo.attrInfo"
+                                               :src='item.productInfo.attrInfo.image'></image>
+                                        <image v-else
+                                               :src='item.productInfo.image'></image>
+                                    </view>
+                                    <view class='text'>
+                                        <view class='line1'
+                                              :class="item.attrStatus?'':'reColor'">{{item.productInfo.storeName}}</view>
+                                        <view class='infor line1'
+                                              v-if="item.productInfo.attrInfo">属性：{{item.productInfo.attrInfo.suk}}</view>
+                                        <view class='money'
+                                              v-if="item.attrStatus">￥{{item.truePrice}}</view>
+                                        <view class="reElection acea-row row-between-wrapper"
+                                              v-else>
+                                            <view class="title">请重新选择商品规格</view>
+                                            <view class="reBnt cart-color acea-row row-center-wrapper"
+                                                  @click.stop="reElection(item)">重选</view>
+                                        </view>
+                                    </view>
+                                    <view class='carnum acea-row row-center-wrapper'
+                                          v-if="item.attrStatus">
+                                        <view class="reduce"
+                                              :class="item.numSub ? 'on' : ''"
+                                              @click.stop='subCart(index)'>-</view>
+                                        <view class='num'>{{item.cartNum}}</view>
+                                        <!-- <view class="num">
 											<input type="number" v-model="item.cart_num" @click.stop @input="iptCartNum(index)" @blur="blurInput(index)"/>
 										</view> -->
-										<view class="plus" :class="item.numAdd ? 'on' : ''" @click.stop='addCart(index)'>+</view>
-									</view>
-								</navigator>
-							</view>
-						</block>
-					</checkbox-group>
-				</view>
-				<view class='invalidGoods' v-if="cartList.invalid.length > 0">
-					<view class='goodsNav acea-row row-between-wrapper'>
-						<view @click='goodsOpen'><text class='iconfont' :class='goodsHidden==true?"icon-xiangxia":"icon-xiangshang"'></text>失效商品</view>
-						<view class='del' @click='unsetCart'><text class='iconfont icon-shanchu1'></text>清空</view>
-					</view>
-					<view class='goodsList' :hidden='goodsHidden'>
-						<block v-for="(item,index) in cartList.invalid" :key='index'>
-							<view class='item acea-row row-between-wrapper'>
-								<view class='invalid'>失效</view>
-								<view class='pictrue'>
-									<image v-if="item.productInfo.attrInfo" :src='item.productInfo.attrInfo.image'></image>
-									<image v-else :src='item.productInfo.image'></image>
-								</view>
-								<view class='text acea-row row-column-between'>
-									<view class='line1 name'>{{item.productInfo.storeName}}</view>
-									<view class='infor line1' v-if="item.productInfo.attrInfo">属性：{{item.productInfo.attrInfo.suk}}</view>
-									<view class='acea-row row-between-wrapper'>
-										<!-- <view>￥{{item.truePrice}}</view> -->
-										<view class='end'>该商品已失效</view>
-									</view>
-								</view>
-							</view>
-						</block>
-					</view>
-				</view>
-				<view class='loadingicon acea-row row-center-wrapper' v-if="cartList.valid.length&&!loadend">
-					<text class='loading iconfont icon-jiazai' :hidden='loading==false'></text>{{loadTitle}}
-				</view>
-				<view class='loadingicon acea-row row-center-wrapper' v-if="cartList.invalid.length&&loadend">
-					<text class='loading iconfont icon-jiazai' :hidden='loadingInvalid==false'></text>{{loadTitleInvalid}}
-				</view>
-			</view>
-			<view class='noCart' v-if="cartList.valid.length == 0 && cartList.invalid.length == 0">
-				<view class='pictrue'>
-					<image src='../../static/images/noCart.png'></image>
-				</view>
-				<recommend :hostProduct='hostProduct'></recommend>
-			</view>
-			<view style='height:120rpx;color: #F5F5F5;'>{{selectCountPrice}}</view>
-			<view class='footer acea-row row-between-wrapper' v-if="cartList.valid.length > 0">
-				<view>
-					<checkbox-group @change="checkboxAllChange">
-						<checkbox value="all" :checked="!!isAllSelect" /><text class='checkAll'>全选 ({{cartCount}})</text>
-					</checkbox-group>
-				</view>
-				<view class='money acea-row row-middle' v-if="footerswitch==true">
-					<text class='font-color'>￥{{selectCountPrice}}</text>
-					<form @submit="subOrder" report-submit='true'>
-						<button class='placeOrder bg-color' formType="submit">立即下单</button>
-					</form>
-				</view>
-				<view class='button acea-row row-middle' v-else>
-					<form @submit="subCollect" report-submit='true'>
-						<button class='bnt cart-color' formType="submit">收藏</button>
-					</form>
-					<form @submit="subDel" report-submit='true'>
-						<button class='bnt' formType="submit">删除</button>
-					</form>
-				</view>
-			</view>
-		</view>
-		<productWindow :attr="attr" :isShow='1' :iSplus='1' :iScart='1' @myevent="onMyEvent" @ChangeAttr="ChangeAttr"
-		 @ChangeCartNum="ChangeCartNum" @attrVal="attrVal" @iptCartNum="iptCartNum" @goCat="reGoCat" id='product-window'></productWindow>
-		<!-- #ifdef MP -->
-		<authorize :isAuto="isAuto" :isShowAuth="isShowAuth" @authColse="authColse"></authorize>
-		<!-- #endif -->
-	</view>
+                                        <view class="plus"
+                                              :class="item.numAdd ? 'on' : ''"
+                                              @click.stop='addCart(index)'>+</view>
+                                    </view>
+                                </navigator>
+                            </view>
+                        </block>
+                    </checkbox-group>
+                </view>
+                <view class='invalidGoods'
+                      v-if="cartList.invalid.length > 0">
+                    <view class='goodsNav acea-row row-between-wrapper'>
+                        <view @click='goodsOpen'><text class='iconfont'
+                                  :class='goodsHidden==true?"icon-xiangxia":"icon-xiangshang"'></text>失效商品</view>
+                        <view class='del'
+                              @click='unsetCart'><text class='iconfont icon-shanchu1'></text>清空</view>
+                    </view>
+                    <view class='goodsList'
+                          :hidden='goodsHidden'>
+                        <block v-for="(item,index) in cartList.invalid"
+                               :key='index'>
+                            <view class='item acea-row row-between-wrapper'>
+                                <view class='invalid'>失效</view>
+                                <view class='pictrue'>
+                                    <image v-if="item.productInfo.attrInfo"
+                                           :src='item.productInfo.attrInfo.image'></image>
+                                    <image v-else
+                                           :src='item.productInfo.image'></image>
+                                </view>
+                                <view class='text acea-row row-column-between'>
+                                    <view class='line1 name'>{{item.productInfo.storeName}}</view>
+                                    <view class='infor line1'
+                                          v-if="item.productInfo.attrInfo">属性：{{item.productInfo.attrInfo.suk}}</view>
+                                    <view class='acea-row row-between-wrapper'>
+                                        <!-- <view>￥{{item.truePrice}}</view> -->
+                                        <view class='end'>该商品已失效</view>
+                                    </view>
+                                </view>
+                            </view>
+                        </block>
+                    </view>
+                </view>
+                <view class='loadingicon acea-row row-center-wrapper'
+                      v-if="cartList.valid.length&&!loadend">
+                    <text class='loading iconfont icon-jiazai'
+                          :hidden='loading==false'></text>{{loadTitle}}
+                </view>
+                <view class='loadingicon acea-row row-center-wrapper'
+                      v-if="cartList.invalid.length&&loadend">
+                    <text class='loading iconfont icon-jiazai'
+                          :hidden='loadingInvalid==false'></text>{{loadTitleInvalid}}
+                </view>
+            </view>
+            <view class='noCart'
+                  v-if="cartList.valid.length == 0 && cartList.invalid.length == 0">
+                <view class='pictrue'>
+                    <image src='../../static/images/noCart.png'></image>
+                </view>
+                <recommend :hostProduct='hostProduct'></recommend>
+            </view>
+            <view style='height:120rpx;color: #F5F5F5;'>{{selectCountPrice}}</view>
+            <view class='footer acea-row row-between-wrapper'
+                  v-if="cartList.valid.length > 0">
+                <view>
+                    <checkbox-group @change="checkboxAllChange">
+                        <checkbox value="all"
+                                  :checked="!!isAllSelect" /><text class='checkAll'>全选 ({{cartCount}})</text>
+                    </checkbox-group>
+                </view>
+                <view class='money acea-row row-middle'
+                      v-if="footerswitch==true">
+                    <text class='font-color'>￥{{selectCountPrice}}</text>
+                    <form @submit="subOrder"
+                          report-submit='true'>
+                        <button class='placeOrder bg-color'
+                                formType="submit">立即下单</button>
+                    </form>
+                </view>
+                <view class='button acea-row row-middle'
+                      v-else>
+                    <form @submit="subCollect"
+                          report-submit='true'>
+                        <button class='bnt cart-color'
+                                formType="submit">收藏</button>
+                    </form>
+                    <form @submit="subDel"
+                          report-submit='true'>
+                        <button class='bnt'
+                                formType="submit">删除</button>
+                    </form>
+                </view>
+            </view>
+        </view>
+        <productWindow :attr="attr"
+                       :isShow='1'
+                       :iSplus='1'
+                       :iScart='1'
+                       @myevent="onMyEvent"
+                       @ChangeAttr="ChangeAttr"
+                       @ChangeCartNum="ChangeCartNum"
+                       @attrVal="attrVal"
+                       @iptCartNum="iptCartNum"
+                       @goCat="reGoCat"
+                       id='product-window'></productWindow>
+        <!-- #ifdef MP -->
+        <authorize @onLoadFun="onLoadFun"
+                   :isAuto="isAuto"
+                   :isShowAuth="isShowAuth"
+                   @authColse="authColse"></authorize>
+        <!-- #endif -->
+    </view>
 </template>
 
 <script>
@@ -195,18 +250,32 @@
 		onLoad: function(options) {
 			let that = this;
 			if (that.isLogin == false) {
-				// #ifdef H5 || APP-PLUS
 				toLogin();
-				// #endif 
-				// #ifdef MP
 				that.isAuto = true;
 				that.$set(that, 'isShowAuth', true);
-				// #endif
 			}
 		},
 		onShow: function() {
 			if (this.isLogin == true) {
-				this.hotPage = 1;
+				this.initData();
+				// this.hostProduct = [];
+				// this.hotScroll = false;
+				// this.hotPage = 1;
+				// this.hotLimit = 10;
+				// this.cartList = {
+                //     valid: [],
+                //     invalid: []
+                // };
+				// this.isAllSelect = false; //全选
+				// this.selectValue = []; //选中的数据
+				// this.selectCountPrice = 0.00;
+				// this.cartCount = 0;
+				// this.isShowAuth = false;
+			};
+		},
+		methods: {
+            initData: function() {
+                this.hotPage = 1;
 				this.hostProduct = [],
 				this.hotScroll = false,
 				this.getHostProduct();
@@ -221,22 +290,10 @@
 				this.getCartNum();
 				this.goodsHidden = true;
 				this.footerswitch = true;
-				this.hostProduct = [];
-				this.hotScroll = false;
-				this.hotPage = 1;
-				this.hotLimit = 10;
-				this.cartList = {
-						valid: [],
-						invalid: []
-					},
-					this.isAllSelect = false; //全选
-				this.selectValue = []; //选中的数据
-				this.selectCountPrice = 0.00;
-				this.cartCount = 0;
-				this.isShowAuth = false;
-			};
-		},
-		methods: {
+            },
+            onLoadFun: function() {
+				this.initData();
+            },
 			// 授权关闭
 			authColse: function(e) {
 				this.isShowAuth = e;

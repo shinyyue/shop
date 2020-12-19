@@ -14,13 +14,11 @@
                            mode=""
                            @click="goEdit()"></image>
                     <view class="info">
-                        <!-- #ifdef MP -->
                         <view class="name"
                               v-if="!userInfo.uid"
                               @tap="openAuto">
                             请点击授权
                         </view>
-                        <!-- #endif -->
                         <view class="name"
                               v-if="userInfo.uid">
                             {{userInfo.nickname}}
@@ -101,9 +99,9 @@
             <block v-for="(item,index) in MyMenus"
                    :key="index">
                 <navigator class="item"
-                    :url="item.url"
-                    hover-class="none"
-                    v-if="!(item.url =='/pages/service/index' || (item.url =='/pages/users/user_spread_user/index' && !userInfo.isPromoter))">
+                           :url="item.url"
+                           hover-class="none"
+                           v-if="!(item.url =='/pages/service/index' || (item.url =='/pages/users/user_spread_user/index' && !userInfo.isPromoter))">
                     <view class="left">
                         <image :src="item.pic"></image>
                         <text>{{item.name}}</text>
@@ -112,7 +110,7 @@
                 </navigator>
             </block>
             <View class="item"
-                @click="concat">
+                  @click="concat">
                 <view class="left">
                     <image src="/static/images/user_menu08.png"></image>
                     <text>联系客服</text>
@@ -143,16 +141,14 @@
 	} from '@/libs/login.js';
 	import {
 		mapGetters
-	} from "vuex";
-	// #ifdef MP
+    } from "vuex";
+    
 	import authorize from '@/components/Authorize';
-	// #endif
-	const app = getApp();
+    const app = getApp();
+    
 	export default {
 		components: {
-			// #ifdef MP
 			authorize
-			// #endif
 		},
 		computed: mapGetters(['isLogin']),
 		data() {
@@ -203,8 +199,7 @@
 			}
 		},
 		onLoad() {
-			let that = this;
-            that.$set(that, 'MyMenus', app.globalData.MyMenus);
+            this.$set(this, 'MyMenus', app.globalData.MyMenus);
 		},
 		onShow: function() {
 			let that = this;
