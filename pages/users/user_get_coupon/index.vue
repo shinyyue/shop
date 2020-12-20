@@ -1,38 +1,57 @@
 <template>
-	<view>
-		<view class='coupon-list' v-if="couponsList.length">
-			<view class='item acea-row row-center-wrapper' v-for="(item,index) in couponsList" :key="index">
-				<view class='money' :class='item.isUse ? "moneyGray" : "" '>
-					<view>￥<text class='num'>{{item.money}}</text></view>
-					<view class="pic-num">满{{item.minPrice}}元可用</view>
-				</view>
-				<view class='text'>
-					<view class='condition line1'>
-					    <span class='line-title' :class='(item.isUse==true || item.isUse==2)?"gray":""' v-if='item.type===0'>通用劵</span>
-					    <span class='line-title' :class='(item.isUse==true || item.isUse==2)?"gray":""' v-else-if='item.type===1'>品类券</span>
-					    <span class='line-title' :class='(item.isUse==true || item.isUse==2)?"gray":""' v-else>商品券</span>
-					    <span>{{item.name}}</span>
-					</view>
-					<view class='data acea-row row-between-wrapper'>
-						<view>{{ item.receiveStartTime ? item.receiveStartTime + "-" : ""}}{{ item.receiveEndTime }}</view>
-						<view class='bnt gray' v-if="item.isUse==true">已领取</view>
-						<view class='bnt bg-color' v-else @click='getCoupon(item.id,index)'>立即领取</view>
-					</view>
-				</view>
-			</view>
-		</view>
-		<view class='loadingicon acea-row row-center-wrapper' v-if="couponsList.length">
-		     <text class='loading iconfont icon-jiazai' :hidden='loading==false'></text>{{loadTitle}}
-		  </view>
-		<view class='noCommodity' v-else-if="!couponsList.length && loading==true">
-			<view class='pictrue'>
-				<image src='../../../static/images/noCoupon.png'></image>
-			</view>
-		</view>
-		<!-- #ifdef MP -->
-		<authorize @onLoadFun="onLoadFun" :isAuto="isAuto" :isShowAuth="isShowAuth" @authColse="authColse"></authorize>
-		<!-- #endif -->
-	</view>
+    <view>
+        <view class='coupon-list'
+              v-if="couponsList.length">
+            <view class='item acea-row row-center-wrapper'
+                  v-for="(item,index) in couponsList"
+                  :key="index">
+                <view class='money'
+                      :class='item.isUse ? "moneyGray" : "" '>
+                    <view>￥<text class='num'>{{item.money}}</text></view>
+                    <view class="pic-num">满{{item.minPrice}}元可用</view>
+                </view>
+                <view class='text'>
+                    <view class='condition line1'>
+                        <span class='line-title'
+                              :class='(item.isUse==true || item.isUse==2)?"gray":""'
+                              v-if='item.type===0'>通用劵</span>
+                        <span class='line-title'
+                              :class='(item.isUse==true || item.isUse==2)?"gray":""'
+                              v-else-if='item.type===1'>品类券</span>
+                        <span class='line-title'
+                              :class='(item.isUse==true || item.isUse==2)?"gray":""'
+                              v-else>商品券</span>
+                        <span>{{item.name}}</span>
+                    </view>
+                    <view class='data acea-row row-between-wrapper'>
+                        <view>{{ item.receiveStartTime ? item.receiveStartTime + "-" : ""}}{{ item.receiveEndTime }}</view>
+                        <view class='bnt gray'
+                              v-if="item.isUse==true">已领取</view>
+                        <view class='bnt bg-color'
+                              v-else
+                              @click='getCoupon(item.id,index)'>立即领取</view>
+                    </view>
+                </view>
+            </view>
+        </view>
+        <view class='loadingicon acea-row row-center-wrapper'
+              v-if="couponsList.length">
+            <text class='loading iconfont icon-jiazai'
+                  :hidden='loading==false'></text>{{loadTitle}}
+        </view>
+        <view class='noCommodity'
+              v-else-if="!couponsList.length && isDataRequest">
+            <view class='pictrue'>
+                <image src='../../../static/images/noCoupon.png'></image>
+            </view>
+        </view>
+        <!-- #ifdef MP -->
+        <authorize @onLoadFun="onLoadFun"
+                   :isAuto="isAuto"
+                   :isShowAuth="isShowAuth"
+                   @authColse="authColse"></authorize>
+        <!-- #endif -->
+    </view>
 </template>
 
 <script>
@@ -58,29 +77,24 @@
 			data() {
 				return {
 					couponsList: [],
-					loading: true,
+					loading: false,
 					loadend: false,
 					loadTitle: '加载更多',//提示语
 					page: 1,
 					limit: 20,
 					isAuto: false, //没有授权的不会自动授权
-					isShowAuth: false //是否隐藏授权
+                    isShowAuth: false, //是否隐藏授权
+                    isDataRequest: false, //是否请求过优惠券列表
 				};
 			},
 			computed: mapGetters(['isLogin']),
 			onLoad(){
 				if(this.isLogin){
-					// #ifdef H5
 					this.getUseCoupons();
-					// #endif
 				}else{
-					// #ifdef H5 || APP-PLUS
 					toLogin();
-					// #endif 
-					// #ifdef MP
 					this.isAuto = true;
 					this.$set(this,'isShowAuth',true)
-					// #endif
 				}
 			},
 			 /**
@@ -117,18 +131,23 @@
 				    getUseCoupons:function(){
 				      let that=this
 				      if(this.loadend) return false;
-				      if(this.loading) return false;
+                      if(this.loading) return false;
+                      this.$set(this, 'loading', true);
 				      getCoupons({ page: that.page, limit: that.limit }).then(res=>{
-				        let list=res.data,loadend=list.length < that.limit;
+                        
+				        let list=res.data || [],loadend=list.length < that.limit;
 				        let couponsList = that.$util.SplitArray(list, that.couponsList);
 						that.$set(that,'couponsList',couponsList);
 						that.loadend = loadend;
 						that.loadTitle = loadend ? '我也是有底线的' : '加载更多';
 						that.page = that.page + 1;
-						that.loading = false;
+                        that.loading = false;
+                        this.$set(this, 'isDataRequest', true);
 				      }).catch(err=>{
+                          console.log('优惠券列表-----2', err)
 						  that.loading = false;
-						  that.loadTitle = '加载更多';
+                          that.loadTitle = '加载更多';
+                          this.$set(this, 'isDataRequest', true);
 				      });
 				    }
 			}
