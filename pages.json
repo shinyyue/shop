@@ -227,6 +227,14 @@
                 "style": {
                     "navigationBarTitleText": "商品评分"
                 }
+            },
+            {
+                "path": "user_phone/index",
+                "style": {
+                    "navigationBarTitleText": "绑定手机",
+                    "navigationBarBackgroundColor": "#e93323",
+                    "navigationBarTextStyle": "#fff"
+                }
             }
         ]
     }],

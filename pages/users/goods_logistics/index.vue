@@ -91,7 +91,6 @@
 		},
 		computed: mapGetters(['isLogin']),
 		onLoad: function (options) {
-            console.log(22222, options)
 		    if (!options.orderId) return this.$util.Tips({title:'缺少订单号'});
 			this.orderId = options.orderId;
 			if (this.isLogin) {

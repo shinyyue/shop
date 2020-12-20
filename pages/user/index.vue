@@ -39,9 +39,9 @@
                                        mode=""></image>
                             </view>
                         </view>
-                        <view class="phone"
+                        <!-- <view class="phone"
                               v-if="!userInfo.phone && isLogin"
-                              @tap="bindPhone">绑定手机号</view>
+                              @tap="bindPhone">绑定手机号</view> -->
                     </view>
                 </view>
                 <view class="num-wrapper">
@@ -201,23 +201,17 @@
 		},
 		onShow: function() {
             let that = this;
-            console.log(1111, this.isLogin)
 			if (that.isLogin) {
+                this.$set(this, 'isAuto', false); 
+				this.$set(this, 'isShowAuth', false); 
 				this.getUserInfo();
 				this.getMyMenus();
-				// this.setVisit();
 				this.getOrderData();
 			} else {
 				this.openAuto();
 			}
 		},
 		methods: {
-			// 记录会员访问
-			// setVisit(){
-			// 	setVisit({
-			// 		url:'/pages/user/index'
-			// 	}).then(res=>{})
-            // },
             concat() {
                 uni.makePhoneCall({
 					phoneNumber: '076928826746'
@@ -258,15 +252,7 @@
 			onLoadFun() {
 				this.getUserInfo();
 				this.getMyMenus();
-				// this.setVisit();
 				this.getOrderData();
-			},
-			Setting: function() {
-				uni.openSetting({
-					success: function(res) {
-						console.log(res.authSetting)
-					}
-				});
 			},
 			// 授权关闭
 			authColse: function(e) {

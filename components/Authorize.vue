@@ -38,9 +38,7 @@
 			}
 		},
 		data(){
-			return {
-				logoUrl:''
-			}
+			return {}
 		},
 		computed:mapGetters(['isLogin','userInfo']),
 		watch:{
@@ -49,7 +47,6 @@
 			}
 		},
 		created() {
-			this.getLogoUrl();
 			this.setAuthStatus();
 		},
 		methods:{
@@ -79,7 +76,7 @@
 					Routine.authUserInfo(code,userInfo).then(res=>{
 						uni.hideLoading();
 						this.$emit('authColse',false);
-						this.$emit('onLoadFun',this.userInfo);
+						this.$emit('onLoadFun');
 					}).catch(res=>{
 						uni.hideLoading();
 						uni.showToast({
@@ -100,17 +97,6 @@
 					uni.hideLoading();
 				})
 			},
-			getLogoUrl(){
-				let that = this;
-				if (Cache.has(LOGO_URL)) {
-					this.logoUrl = Cache.get(LOGO_URL);
-					return;
-				}
-				getLogo().then(res=>{
-					that.logoUrl = res.data.logo_url
-					Cache.set(LOGO_URL,that.logoUrl);
-				})
-			},
 			close(){
 				let pages = getCurrentPages(), currPage  = pages[pages.length - 1];
 				if(this.isGoIndex){
@@ -118,9 +104,6 @@
 				} else {
 					this.$emit('authColse',false);
 				}
-				// if (currPage && currPage.isShowAuth != undefined){
-				// 	currPage.isShowAuth = true;
-				// }
 			},
 		}
 	}

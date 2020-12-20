@@ -201,9 +201,7 @@
 		components: {
 			recommend,
 			productWindow,
-			// #ifdef MP
 			authorize
-			// #endif
 		},
 		data() {
 			return {
@@ -247,49 +245,41 @@
 			};
 		},
 		computed: mapGetters(['isLogin']),
-		onLoad: function(options) {
-			let that = this;
-			if (that.isLogin == false) {
-				toLogin();
-				that.isAuto = true;
-				that.$set(that, 'isShowAuth', true);
-			}
-		},
+		onLoad: function(options) { },
 		onShow: function() {
 			if (this.isLogin == true) {
-				this.initData();
-				// this.hostProduct = [];
-				// this.hotScroll = false;
-				// this.hotPage = 1;
-				// this.hotLimit = 10;
-				// this.cartList = {
-                //     valid: [],
-                //     invalid: []
-                // };
-				// this.isAllSelect = false; //全选
-				// this.selectValue = []; //选中的数据
-				// this.selectCountPrice = 0.00;
-				// this.cartCount = 0;
-				// this.isShowAuth = false;
-			};
+                this.initData();
+                this.$set(this, 'isAuto', false); 
+				this.$set(this, 'isShowAuth', false); 
+			} else {
+                toLogin();
+				this.$set(this, 'isAuto', true);
+				this.$set(this, 'isShowAuth', true);
+            }
 		},
 		methods: {
-            initData: function() {
+            clearData: function() {
                 this.hotPage = 1;
-				this.hostProduct = [],
-				this.hotScroll = false,
-				this.getHostProduct();
-				this.loadend = false;
+				this.hostProduct = [];
+                this.hotScroll = false;
+
+                this.loadend = false;
 				this.page = 1;
-				this.cartList.valid = [];
-				this.getCartList();
-				this.loadendInvalid = false;
+                this.cartList.valid = [];
+
+                this.loadendInvalid = false;
 				this.pageInvalid = 1;
-				this.cartList.invalid = [];
+                this.cartList.invalid = [];
+
+                this.goodsHidden = true;
+				this.footerswitch = true;
+            },
+            initData: function() {
+                this.clearData();
+				this.getHostProduct();
+				this.getCartList();
 				this.getInvalidList();
 				this.getCartNum();
-				this.goodsHidden = true;
-				this.footerswitch = true;
             },
             onLoadFun: function() {
 				this.initData();
@@ -529,8 +519,6 @@
 					selectValue = that.selectValue;
 				if (selectValue.length > 0) {
 					let selectValueProductId = that.getSelectValueProductId();
-					console.log('selectValueProductId');
-					console.log(selectValueProductId.join(','));
 					collectAll(that.getSelectValueProductId()).then(res => {
 						return that.$util.Tips({
 							title: res.msg,
@@ -705,7 +693,8 @@
 			getCartList: function() {
 				let that = this;
 				if (this.loadend) return false;
-				if (this.loading) return false;
+                if (this.loading) return false;
+                this.loading = true;
 				let data = {
 					page: that.page,
 					limit: that.limit,
