@@ -119,12 +119,10 @@
             </View>
         </view>
         <view style="height: 50rpx;"></view>
-        <!-- #ifdef MP -->
         <authorize @onLoadFun="onLoadFun"
                    :isAuto="isAuto"
                    :isShowAuth="isShowAuth"
                    @authColse="authColse"></authorize>
-        <!-- #endif -->
     </view>
 </template>
 <script>
@@ -202,7 +200,8 @@
             this.$set(this, 'MyMenus', app.globalData.MyMenus);
 		},
 		onShow: function() {
-			let that = this;
+            let that = this;
+            console.log(1111, this.isLogin)
 			if (that.isLogin) {
 				this.getUserInfo();
 				this.getMyMenus();
@@ -251,8 +250,9 @@
 			},
 			// 打开授权
 			openAuto() {
-				this.isAuto = true;
-				this.isShowAuth = true
+                toLogin();
+				this.$set(this, 'isAuto', true); 
+				this.$set(this, 'isShowAuth', true); 
 			},
 			// 授权回调
 			onLoadFun() {

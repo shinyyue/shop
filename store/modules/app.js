@@ -3,12 +3,11 @@ import {
 } from "../../api/user.js";
 import {
 	LOGIN_STATUS,
-	UID
+    UID,
+    STATE_R_KEY,
+    USER_INFO
 } from '../../config/cache';
 import Cache from '../../utils/cache';
-import {
-	USER_INFO
-} from '../../config/cache';
 
 const state = {
 	token: Cache.get(LOGIN_STATUS) || null,
@@ -35,7 +34,9 @@ const mutations = {
 		state.token = undefined;
 		state.uid = undefined
 		Cache.clear(LOGIN_STATUS);
-		Cache.clear(UID);
+        Cache.clear(UID);
+        Cache.clear(USER_INFO);
+        Cache.clear(STATE_R_KEY)
 	},
 	BACKGROUND_COLOR(state, color) {
 		state.color = color;

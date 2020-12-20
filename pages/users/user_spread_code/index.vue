@@ -199,7 +199,6 @@
                                             });
                                         },
                                         complete: function(res) {
-                                            console.log(11111, res)
                                         },
                                     })
                                 },

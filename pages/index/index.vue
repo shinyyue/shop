@@ -220,11 +220,11 @@
                        :couponList="couponList"
                        @onColse="onColse"></coupon-window>
         <!-- #ifdef MP -->
-        <authorize @onLoadFun="onLoadFun"
+        <!-- <authorize @onLoadFun="onLoadFun"
                    :isAuto="isAuto"
                    :isShowAuth="isShowAuth"
                    @authColse="authColse"
-                   :isGoIndex="false"></authorize>
+                   :isGoIndex="false"></authorize> -->
         <!-- #endif -->
     </view>
 </template>
@@ -580,7 +580,7 @@
 					
 					// this.shareApi();
 					
-					this.getcouponList();
+					// this.getcouponList();
 				})
 			},
 			getcouponList() {
